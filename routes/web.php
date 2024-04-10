@@ -20,11 +20,13 @@ Route::get('/', function () {
 
 Route::get('/test', function () {
     return view('test');
-});
+})->name('test')->middleware('auth');
 
-
+Auth::routes();
 // Route::get('/admin/dashboard', function (){
 //     return view('dashboard');
 // });
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
+Route::get('{view}', ApplicationController::class)->where('view', '(.*)')->middleware('auth');
+

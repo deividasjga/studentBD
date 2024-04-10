@@ -5,4 +5,5 @@
         <h1>From blade</h1>
         <test-component></test-component>
     </div>
+
 @endsection
