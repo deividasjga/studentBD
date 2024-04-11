@@ -27,7 +27,7 @@
 </li>
 </ul>
 
-<ul class="navbar-nav ml-auto">
+<!-- <ul class="navbar-nav ml-auto">
 
 <li class="nav-item">
 <a class="nav-link" data-widget="navbar-search" href="#" role="button">
@@ -144,7 +144,7 @@ Nora Silvester
 <i class="fas fa-th-large"></i>
 </a>
 </li>
-</ul>
+</ul> -->
 </nav>
 
 
@@ -181,7 +181,7 @@ Nora Silvester
 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
 <li class="nav-item menu-open">
-<a href="#" class="nav-link active">
+<a href="#" class="nav-link" >
 <i class="nav-icon fas fa-tachometer-alt"></i>
 <p>
 Users
@@ -190,13 +190,13 @@ Users
 </a>
 <ul class="nav nav-treeview">
 <li class="nav-item">
-<a href="{{ route('test') }}" class="nav-link">
+<a href="{{ route('test') }}" class="nav-link {{ Request::is('test') ? 'active' : '' }}">
 <i class="far fa-circle nav-icon"></i>
 <p>1</p>
 </a>
 </li>
 <li class="nav-item">
-<a href="{{ route('test') }}" class="nav-link">
+<a href="{{ route('home') }}" class="nav-link {{ Request::is('home') ? 'active' : '' }}">
 <i class="far fa-circle nav-icon"></i>
 <p>2</p>
 </a>
@@ -225,16 +225,16 @@ Users
 
 <div class="content-wrapper">
 
-<div class="content-header">
+<!-- <div class="content-header">
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
 <h1 class="m-0">Starter Page</h1>
-<div class="col-md-9">
+<div class="col-md-9"> -->
                 <main class="py-4">
                     @yield('content')
                 </main>
-            </div>
+            <!-- </div>
 </div>
 <div class="col-sm-6">
 <ol class="breadcrumb float-sm-right">
@@ -301,7 +301,7 @@ content.
 </div>
 
 </div>
-</div>
+</div> -->
 
 </div>
 
@@ -317,10 +317,10 @@ content.
 <footer class="main-footer">
 
 <div class="float-right d-none d-sm-inline">
-Anything you want
+<!-- Anything you want -->
 </div>
 
-<strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+<!-- <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved. -->
 </footer>
 </div>
 
