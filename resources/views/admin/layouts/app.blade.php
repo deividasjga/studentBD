@@ -11,7 +11,7 @@
 </head>
 <body class="hold-transition sidebar-mini">
 
-<div class="wrapper">
+<div class="wrapper" id="app">
 
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
 
@@ -182,7 +182,7 @@ Nora Silvester
 
 <li class="nav-item menu-open">
 <a href="#" class="nav-link" >
-<i class="nav-icon fas fa-tachometer-alt"></i>
+<i class="nav-icon fas fa-users"></i>
 <p>
 Users
 <i class="right fas fa-angle-left"></i>
@@ -190,9 +190,9 @@ Users
 </a>
 <ul class="nav nav-treeview">
 <li class="nav-item">
-<a href="{{ route('test') }}" class="nav-link {{ Request::is('test') ? 'active' : '' }}">
+<a href="{{ route('StudentList') }}" class="nav-link {{ Request::is('StudentList') ? 'active' : '' }}">
 <i class="far fa-circle nav-icon"></i>
-<p>1</p>
+<p>Students</p>
 </a>
 </li>
 <li class="nav-item">
