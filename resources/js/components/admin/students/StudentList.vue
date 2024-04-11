@@ -4,6 +4,7 @@ import { ref, onMounted, reactive } from 'vue';
 import { Form, Field, useResetForm } from 'vee-validate';
 import * as yup from 'yup';
 import { useToastr } from '../../../toastr.js';
+import { formatDate } from '../../../helper.js';
 
 const toastr = useToastr();
 const users = ref([]);
@@ -162,6 +163,7 @@ onMounted(() => {
                                 <th style="width: 35px">#</th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Registration Date</th>
                                 <th>Options</th>
                             </tr>
                         </thead>
@@ -170,6 +172,7 @@ onMounted(() => {
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
+                                <td>{{ formatDate(user.created_at) }}</td>
                                 <td>
                                     <a href="#" @click.prevent="editUser(user)"><i class="fa fa-edit"></i></a>
                                     <a href="#" @click.prevent="confirmUserDeletion(user)"><i class="fa fa-trash text-danger ml-2"></i></a>
