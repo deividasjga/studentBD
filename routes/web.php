@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\SubjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,10 @@ Route::get('/StudentList', function () {
     return view('admin.students.StudentList');
 })->name('StudentList');
 
+Route::get('/subjects', function () {
+    return view('admin.subjects.subjectList');
+})->name('subjectList');
+
 
 Auth::routes();
 
@@ -37,18 +42,15 @@ Route::middleware(['auth'])->group(function(){
     Route::post('api/students', [StudentController::class, 'store']);
     Route::put('api/students/{user}', [StudentController::class, 'update']);
     Route::delete('api/students/{user}', [StudentController::class, 'destroy']);
+
+    Route::get('api/subjects', [SubjectController::class, 'index']);
+    Route::post('api/subjects', [SubjectController::class, 'store']);
+    Route::put('api/subjects/{subject}', [SubjectController::class, 'update']);
+    Route::delete('api/subjects/{subject}', [SubjectController::class, 'destroy']);
 });
 
 Route::middleware(['auth', 'user-role:admin'])->group(function(){
     // Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-    // Route::get('api/users', [UserController::class, 'index']);
-    // Route::post('api/users', [UserController::class, 'store']);
-    // Route::get('/api/users/search', [UserController::class, 'search']);
-    // Route::patch('/api/users/{user}/change-role', [UserController::class, 'changeRole']);
-    // Route::put('api/users/{user}', [UserController::class, 'update']);
-    // Route::delete('api/users', [UserController::class, 'bulkDelete']);
-    // Route::delete('api/users/{user}', [UserController::class, 'destroy']);
 });
 
 Route::middleware(['auth', 'user-role:student'])->group(function(){

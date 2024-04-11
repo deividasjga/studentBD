@@ -9,6 +9,7 @@ import Routes from './routes.js';
 
 import Test from './components/Test.vue';
 import StudentList from './components/admin/students/StudentList.vue';
+import SubjectList from './components/admin/subjects/SubjectList.vue';
 
 const app = createApp({});
 
@@ -20,6 +21,7 @@ const router = createRouter({
 app.use(router);
 
 app.component('test-component', Test)
-    .component('student-list-component', StudentList);
+    .component('student-list-component', StudentList)
+    .component('subject-component', SubjectList);
 
 app.mount('#app');

@@ -202,6 +202,15 @@ Users
 </a>
 </li>
 </ul>
+
+<li class="nav-item">
+<a href="{{ route('subjectList') }}" class="nav-link {{ Request::is('subjects') ? 'active' : '' }}">
+<i class="nav-icon fas fa-book"></i>
+<p>Subjects</p>
+</a>
+</li>
+
+
 </li>
 
 <li class="nav-item">
