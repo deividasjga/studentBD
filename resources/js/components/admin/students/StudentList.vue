@@ -3,7 +3,9 @@ import axios from 'axios';
 import { ref, onMounted, reactive } from 'vue';
 import { Form, Field, useResetForm } from 'vee-validate';
 import * as yup from 'yup';
+import { useToastr } from '../../../toastr.js';
 
+const toastr = useToastr();
 const users = ref([]);
 const editing = ref(false);
 const formValues = ref();
@@ -52,6 +54,7 @@ const createUser = (values, { resetForm, setErrors }) => {
         users.value.unshift(response.data);
         $('#userFormModal').modal('hide');
         resetForm();
+        toastr.success('Student created successfully.')
     })
     .catch((error) => {
         setErrors(error.response.data.errors);
@@ -86,6 +89,7 @@ const updateUser = (values, {setErrors}) => {
             const index = users.value.findIndex(user => user.id === response.data.id);
             users.value[index] = response.data;
             $('#userFormModal').modal('hide');
+            toastr.success('Student updated successfully.');
         }).catch((error) => {
             setErrors(error.response.data.errors);
             console.log(error);
@@ -113,6 +117,7 @@ const deleteUser = () => {
     .then(() => {
         $('#deleteUserModal').modal('hide');
         users.value = users.value.filter(user => user.id !== userIdBeingDeleted.value);
+        toastr.success('Student deleted successfully.');
     });
 };
 
