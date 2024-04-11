@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,10 +24,28 @@ Route::get('/test', function () {
 })->name('test')->middleware('auth');
 
 Auth::routes();
-// Route::get('/admin/dashboard', function (){
-//     return view('dashboard');
-// });
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::middleware(['auth'])->group(function(){
+    // Route::get('/home', [HomeController::class, 'index'])->name('home');
+});
+
+Route::middleware(['auth', 'user-role:admin'])->group(function(){
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+});
+
+Route::middleware(['auth', 'user-role:student'])->group(function(){
+    
+});
+
+Route::middleware(['auth', 'user-role:teacher'])->group(function(){
+    
+});
+
+Route::middleware(['auth', 'user-role:parent'])->group(function(){
+    
+});
+
 
 Route::get('{view}', ApplicationController::class)->where('view', '(.*)')->middleware('auth');
 
