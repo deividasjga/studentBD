@@ -11,4 +11,11 @@ class SubjectModel extends Model
 
     protected $table = 'subject';
     protected $fillable = ['name', 'status', 'grading_type'];
+
+
+    public function classes()
+    {
+        return $this->belongsToMany(ClassModel::class, 'class_id');
+    }
+
 }

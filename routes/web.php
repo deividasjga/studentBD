@@ -5,6 +5,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
+use App\Http\Controllers\Admin\ClassController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,10 +34,14 @@ Route::get('/subjects', function () {
     return view('admin.subjects.subjectList');
 })->name('subjectList');
 
+Route::get('/classes', function () {
+    return view('admin.classes.classList');
+})->name('classList');
+
 
 Auth::routes();
 
-Route::middleware(['auth'])->group(function(){
+// Route::middleware(['auth'])->group(function(){
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('api/students', [StudentController::class, 'index']);
     Route::post('api/students', [StudentController::class, 'store']);
@@ -47,7 +52,13 @@ Route::middleware(['auth'])->group(function(){
     Route::post('api/subjects', [SubjectController::class, 'store']);
     Route::put('api/subjects/{subject}', [SubjectController::class, 'update']);
     Route::delete('api/subjects/{subject}', [SubjectController::class, 'destroy']);
-});
+
+    Route::get('api/classes', [ClassController::class, 'index']);
+    Route::post('api/classes', [ClassController::class, 'store']);
+    Route::put('api/classes/{class}', [ClassController::class, 'update']);
+    Route::delete('api/classes/{class}', [ClassController::class, 'destroy']);
+    Route::get('api/classes/getClass/{id}', [ClassController::class, 'getClass']);
+// });
 
 Route::middleware(['auth', 'user-role:admin'])->group(function(){
     // Route::get('/home', [HomeController::class, 'index'])->name('home');

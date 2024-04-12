@@ -210,6 +210,13 @@ Users
 </a>
 </li>
 
+<li class="nav-item">
+<a href="{{ route('classList') }}" class="nav-link {{ Request::is('classes') ? 'active' : '' }}">
+<i class="nav-icon fas fa-chalkboard"></i>
+<p>Classes</p>
+</a>
+</li>
+
 
 </li>
 
