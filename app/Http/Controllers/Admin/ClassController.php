@@ -10,8 +10,7 @@ class ClassController extends Controller
 {
     public function index()
     {
-        $classes = ClassModel::latest()->get();
-
+        $classes = ClassModel::with('subjects')->latest()->get();
         return $classes;
     }
 
@@ -23,18 +22,17 @@ class ClassController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $validatedData = $request->validate([
+            'name' => 'required|unique:class|max:255',
             'subjects' => 'array',
         ]);
 
-
         $class = ClassModel::create([
-            'name' => $request->input('name'),
+            'name' => $validatedData['name'],
         ]);
 
-        if ($request->has('subjects') && is_array($request->input('subjects'))) {
-            $class->subjects()->attach($request->input('subjects'));
+        if (isset($validatedData['subjects'])) {
+            $class->subjects()->attach($validatedData['subjects']);
         }
 
         return response()->json($class, 201);
@@ -60,6 +58,18 @@ class ClassController extends Controller
     
         return response()->json($class, 200);
     }
-    
 
+
+    public function destroy($id)
+    {
+        try {
+            $class = ClassModel::findOrFail($id);
+            $class->delete();
+            
+            return response()->json(['message' => 'Class deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete class'], 500);
+        }
+    }
+    
 }

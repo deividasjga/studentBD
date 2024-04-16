@@ -54,6 +54,7 @@ Auth::routes();
     Route::delete('api/subjects/{subject}', [SubjectController::class, 'destroy']);
 
     Route::get('api/classes', [ClassController::class, 'index']);
+    Route::get('api/classes/{class}', [ClassController::class, 'show'])->name('classes.show');
     Route::post('api/classes', [ClassController::class, 'store']);
     Route::put('api/classes/{class}', [ClassController::class, 'update']);
     Route::delete('api/classes/{class}', [ClassController::class, 'destroy']);
