@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\Admin\ParentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,10 @@ Route::get('/TeacherList', function () {
     return view('admin.teachers.TeacherList');
 })->name('TeacherList');
 
+Route::get('/ParentList', function () {
+    return view('admin.parents.ParentList');
+})->name('ParentList');
+
 Route::get('/subjects', function () {
     return view('admin.subjects.subjectList');
 })->name('subjectList');
@@ -57,6 +62,11 @@ Auth::routes();
     Route::post('api/teachers', [TeacherController::class, 'store']);
     Route::put('api/teachers/{user}', [TeacherController::class, 'update']);
     Route::delete('api/teachers/{user}', [TeacherController::class, 'destroy']);
+
+    Route::get('api/parents', [ParentController::class, 'index']);
+    Route::post('api/parents', [ParentController::class, 'store']);
+    Route::put('api/parents/{user}', [ParentController::class, 'update']);
+    Route::delete('api/parents/{user}', [ParentController::class, 'destroy']);
 
     Route::get('api/subjects', [SubjectController::class, 'index']);
     Route::post('api/subjects', [SubjectController::class, 'store']);

@@ -6,11 +6,11 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class TeacherController extends Controller
+class ParentController extends Controller
 {
     public function index()
     {
-        $users = User::where('role', 'teacher')->latest()->get();
+        $users = User::where('role', 'parent')->latest()->get();
         return $users;
     }
 
@@ -31,7 +31,7 @@ class TeacherController extends Controller
             'last_name' => $request->input('last_name'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
-            'role' => 'teacher',
+            'role' => 'parent',
             'address' => $request->input('address'),
             'date_of_birth' => $request->input('date_of_birth'),
             'gender' => $request->input('gender'),
@@ -71,6 +71,6 @@ class TeacherController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return response()->json(['message' => 'Teacher deleted successfully'], 200);
+        return response()->json(['message' => 'Parent deleted successfully'], 200);
     }
 }

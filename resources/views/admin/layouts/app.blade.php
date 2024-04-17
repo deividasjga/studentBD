@@ -201,6 +201,12 @@ Users
 <p>Teachers</p>
 </a>
 </li>
+<li class="nav-item">
+<a href="{{ route('ParentList') }}" class="nav-link {{ Request::is('ParentList') ? 'active' : '' }}">
+<i class="far fa-circle nav-icon"></i>
+<p>Parents</p>
+</a>
+</li>
 </ul>
 
 <li class="nav-item">
