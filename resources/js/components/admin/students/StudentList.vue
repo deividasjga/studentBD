@@ -9,7 +9,14 @@ import { formatDate } from '../../../helper.js';
 const toastr = useToastr();
 const users = ref([]);
 const editing = ref(false);
-const formValues = ref();
+// const formValues = ref();
+const formValues = ref({
+    id: null,
+    first_name: '',
+    last_name: '',
+    email: '',
+    selectedClass: null,
+});
 const form = ref(null);
 const userIdBeingDeleted = ref(null);
 
@@ -23,14 +30,14 @@ const getUsers = () => {
 
 
 const createUserSchema = yup.object({
-    name: yup.string().required(),
+    first_name: yup.string().required(),
     email: yup.string().email().required(),
     password: yup.string().required().min(8),
 });
 
 
 const editUserSchema = yup.object({
-    name: yup.string().required(),
+    first_name: yup.string().required(),
     email: yup.string().email().required(),
     password: yup.string().notRequired().test('password', 'Passwords must be be minimum of 8 characters', function(value) {
                 if (!!value) {
@@ -77,8 +84,10 @@ const editUser = (user) => {
     $('#userFormModal').modal('show');
     formValues.value = {
         id: user.id,
-        name: user.name,
+        first_name: user.first_name,
+        last_name: user.last_name,
         email: user.email,
+        selectedClass: user.student_class_id,
     };
     form.value.setValues(formValues.value);
 };
@@ -99,6 +108,7 @@ const updateUser = (values, {setErrors}) => {
 
 
 const handleSubmit = (values, actions) => {
+    values.selectedClass = formValues.value.selectedClass;
     if (editing.value) {
         updateUser(values, actions);
     } else {
@@ -121,6 +131,7 @@ const deleteUser = () => {
         toastr.success('Student deleted successfully.');
     });
 };
+
 
 
 
@@ -161,18 +172,20 @@ onMounted(() => {
                         <thead>
                             <tr>
                                 <th style="width: 35px">#</th>
-                                <th>Name</th>
+                                <th>Full Name</th>
                                 <th>Email</th>
                                 <th>Registration Date</th>
+                                <th>Class</th>
                                 <th>Options</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(user, index) in users" :key="user.id">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ user.name }}</td>
+                                <td>{{ user.first_name + " " + user.last_name }}</td>
                                 <td>{{ user.email }}</td>
                                 <td>{{ formatDate(user.created_at) }}</td>
+                                <td> {{ getUserClassName(user.student_class_id) }} </td>
                                 <td>
                                     <a href="#" @click.prevent="editUser(user)"><i class="fa fa-edit"></i></a>
                                     <a href="#" @click.prevent="confirmUserDeletion(user)"><i class="fa fa-trash text-danger ml-2"></i></a>
@@ -203,10 +216,17 @@ onMounted(() => {
                 <Form ref="form" @submit="handleSubmit" :validationSchema="editing ? editUserSchema : createUserSchema" v-slot="{ errors }" :initial-values="formValues">
                 <div class="modal-body">
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <Field name="name" class="form-control" :class="{ 'is-invalid': errors.name }" id="name"
-                                aria-describedby="nameHelp" placeholder="Enter full name"/>
-                                <span class="invalid-feedback">{{ errors.name }}</span>
+                            <label for="first_name">First Name</label>
+                            <Field name="first_name" class="form-control" :class="{ 'is-invalid': errors.first_name }" id="first_name"
+                                aria-describedby="nameHelp" placeholder="Enter last name"/>
+                                <span class="invalid-feedback">{{ errors.first_name }}</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="last_name">Last Name</label>
+                            <Field name="last_name" class="form-control" :class="{ 'is-invalid': errors.last_name }" id="last_name"
+                                aria-describedby="nameHelp" placeholder="Enter last name"/>
+                                <span class="invalid-feedback">{{ errors.last_name }}</span>
                         </div>
 
                         <div class="form-group">
@@ -222,6 +242,15 @@ onMounted(() => {
                             aria-describedby="nameHelp" placeholder="Enter password"/>
                             <span class="invalid-feedback">{{ errors.password }}</span>
                     </div>
+
+                    <div class="form-group" v-if="editing">
+                        <label for="class">Class</label>
+                        <select v-model="formValues.selectedClass" class="form-control" id="class">
+                            <option value="">Select a class</option>
+                            <option v-for="classItem in classes" :key="classItem.id" :value="classItem.id">{{ classItem.name }}</option>
+                        </select>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -256,3 +285,32 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<script>
+export default {
+data() {
+    return {
+        errors: {},
+        selectedClass: null,
+        classes: []
+    };
+},
+created() {
+    this.fetchClasses();
+},
+methods: {
+    async fetchClasses() {
+        try {
+            const response = await axios.get('/api/classes');
+            this.classes = response.data;
+        } catch (error) {
+            console.error('Error fetching classes:', error);
+        }
+    },
+    getUserClassName(classId) {
+            const classOne = this.classes.find(c => c.id === classId);
+            return classOne ? classOne.name : '';
+        }
+}
+}
+</script>
