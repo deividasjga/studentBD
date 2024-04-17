@@ -11,6 +11,7 @@ import Test from './components/Test.vue';
 import StudentList from './components/admin/students/StudentList.vue';
 import SubjectList from './components/admin/subjects/SubjectList.vue';
 import ClassList from './components/admin/classes/ClassList.vue';
+import TeacherList from './components/admin/teachers/TeacherList.vue';
 
 const app = createApp({});
 
@@ -24,6 +25,7 @@ app.use(router);
 app.component('test-component', Test)
     .component('student-list-component', StudentList)
     .component('subject-component', SubjectList)
-    .component('class-component', ClassList);
+    .component('class-component', ClassList)
+    .component('teacher-list-component', TeacherList);
 
 app.mount('#app');

@@ -196,9 +196,9 @@ Users
 </a>
 </li>
 <li class="nav-item">
-<a href="{{ route('home') }}" class="nav-link {{ Request::is('home') ? 'active' : '' }}">
+<a href="{{ route('TeacherList') }}" class="nav-link {{ Request::is('TeacherList') ? 'active' : '' }}">
 <i class="far fa-circle nav-icon"></i>
-<p>2</p>
+<p>Teachers</p>
 </a>
 </li>
 </ul>
