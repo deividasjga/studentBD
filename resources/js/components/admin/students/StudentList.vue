@@ -15,6 +15,9 @@ const formValues = ref({
     first_name: '',
     last_name: '',
     email: '',
+    address: '',
+    date_of_birth: '',
+    gender: '',
     selectedClass: null,
 });
 const form = ref(null);
@@ -87,6 +90,9 @@ const editUser = (user) => {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        address: user.address,
+        date_of_birth: user.date_of_birth,
+        gender: user.gender,
         selectedClass: user.student_class_id,
     };
     form.value.setValues(formValues.value);
@@ -200,66 +206,103 @@ onMounted(() => {
 
 
 
-    <div class="modal fade" id="userFormModal" data-backdrop="static" tabindex="-1" role="dialog"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">
-                        <span v-if="editing">Edit Student</span>
-                        <span v-else>Add new Student</span>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <Form ref="form" @submit="handleSubmit" :validationSchema="editing ? editUserSchema : createUserSchema" v-slot="{ errors }" :initial-values="formValues">
+    <div class="modal fade" id="userFormModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    <span v-if="editing">Edit Student</span>
+                    <span v-else>Add new Student</span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <Form ref="form" @submit="handleSubmit" :validationSchema="editing ? editUserSchema : createUserSchema" v-slot="{ errors }" :initial-values="formValues">
                 <div class="modal-body">
-                        <div class="form-group">
-                            <label for="first_name">First Name</label>
-                            <Field name="first_name" class="form-control" :class="{ 'is-invalid': errors.first_name }" id="first_name"
-                                aria-describedby="nameHelp" placeholder="Enter last name"/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="first_name">First Name</label>
+                                <Field name="first_name" class="form-control" :class="{ 'is-invalid': errors.first_name }" id="first_name" placeholder="Enter first name"/>
                                 <span class="invalid-feedback">{{ errors.first_name }}</span>
+                            </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="last_name">Last Name</label>
-                            <Field name="last_name" class="form-control" :class="{ 'is-invalid': errors.last_name }" id="last_name"
-                                aria-describedby="nameHelp" placeholder="Enter last name"/>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="last_name">Last Name</label>
+                                <Field name="last_name" class="form-control" :class="{ 'is-invalid': errors.last_name }" id="last_name" placeholder="Enter last name"/>
                                 <span class="invalid-feedback">{{ errors.last_name }}</span>
+                            </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <Field name="email" type="email" class="form-control" :class="{ 'is-invalid': errors.email }" id="email"
-                                aria-describedby="nameHelp" placeholder="Enter email"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <Field name="email" type="email" class="form-control" :class="{ 'is-invalid': errors.email }" id="email" placeholder="Enter email"/>
                                 <span class="invalid-feedback">{{ errors.email }}</span>
+                            </div>
                         </div>
-
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" id="password"
-                            aria-describedby="nameHelp" placeholder="Enter password"/>
-                            <span class="invalid-feedback">{{ errors.password }}</span>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" id="password" placeholder="Enter password"/>
+                                <span class="invalid-feedback">{{ errors.password }}</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="form-group" v-if="editing">
-                        <label for="class">Class</label>
-                        <select v-model="formValues.selectedClass" class="form-control" id="class">
-                            <option value="">Select a class</option>
-                            <option v-for="classItem in classes" :key="classItem.id" :value="classItem.id">{{ classItem.name }}</option>
-                        </select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <Field name="address" class="form-control" :class="{ 'is-invalid': errors.address }" id="address" placeholder="Enter address"/>
+                                <span class="invalid-feedback">{{ errors.address }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="date_of_birth">Date of Birth</label>
+                                <Field name="date_of_birth" type="date" class="form-control" :class="{ 'is-invalid': errors.date_of_birth }" id="date_of_birth"/>
+                                <span class="invalid-feedback">{{ errors.date_of_birth }}</span>
+                            </div>
+                        </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select name="gender" class="form-control" :class="{ 'is-invalid': errors.gender }" id="gender">
+                                    <option value="">Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <span class="invalid-feedback">{{ errors.gender }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" v-if="editing">
+                                <label for="class">Class</label>
+                                <select v-model="formValues.selectedClass" class="form-control" id="class">
+                                    <option value="">Select a class</option>
+                                    <option v-for="classItem in classes" :key="classItem.id" :value="classItem.id">{{ classItem.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
-                </Form>
-            </div>
+            </Form>
         </div>
     </div>
+</div>
+
+
+
 
 
     <div class="modal fade" id="deleteUserModal" data-backdrop="static" tabindex="-1" role="dialog"
