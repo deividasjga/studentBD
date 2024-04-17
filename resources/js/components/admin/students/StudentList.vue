@@ -33,7 +33,8 @@ const getUsers = () => {
 
 
 const createUserSchema = yup.object({
-    first_name: yup.string().required(),
+    first_name: yup.string().label('First name').required(),
+    last_name: yup.string().label('Last name').required(),
     email: yup.string().email().required(),
     password: yup.string().required().min(8),
 });
