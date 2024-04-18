@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('mainLayouts.app')
 @section('content')
 <div class="container">
         <h2>Assign Classes to {{ $teacher->name }}</h2>

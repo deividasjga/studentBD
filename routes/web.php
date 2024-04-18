@@ -26,7 +26,7 @@ use App\Http\Controllers\Admin\AssignController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
@@ -37,7 +37,6 @@ Route::middleware(['auth'])->group(function(){
     })->name('test');
 });
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'user-role:admin'])->group(function(){
     Route::get('api/students', [StudentController::class, 'index']);
