@@ -13,6 +13,7 @@ import SubjectList from './components/admin/subjects/SubjectList.vue';
 import ClassList from './components/admin/classes/ClassList.vue';
 import TeacherList from './components/admin/teachers/TeacherList.vue';
 import ParentList from './components/admin/parents/ParentList.vue';
+import AdminList from './components/admin/admins/AdminList.vue';
 
 const app = createApp({});
 
@@ -28,6 +29,7 @@ app.component('test-component', Test)
     .component('subject-component', SubjectList)
     .component('class-component', ClassList)
     .component('teacher-list-component', TeacherList)
-    .component('parent-list-component', ParentList);
+    .component('parent-list-component', ParentList)
+    .component('admin-list-component', AdminList);
 
 app.mount('#app');

@@ -207,6 +207,12 @@ Users
 <p>Parents</p>
 </a>
 </li>
+<li class="nav-item">
+<a href="{{ route('AdminList') }}" class="nav-link {{ Request::is('AdminList') ? 'active' : '' }}">
+<i class="far fa-circle nav-icon"></i>
+<p>Admins</p>
+</a>
+</li>
 </ul>
 
 <li class="nav-item">
