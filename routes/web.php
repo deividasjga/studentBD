@@ -96,6 +96,8 @@ Auth::routes();
     Route::get('/teachersAssign', [AssignController::class, 'teacherAssignList'])->name('indexAssign');
     Route::get('/teachers/assignClasses/{id}', [AssignController::class, 'assignTeacherClasses'])->name('assignClass');
     Route::post('/teachers/updateClasses/{id}', [AssignController::class, 'updateTeacherClasses'])->name('updateClass');
+    Route::get('/teachers/assignSubjects/{teacher_id}/{class_id}', [AssignController::class, 'assignTeacherSubjects'])->name('assignSubjects');
+    Route::post('/teachers/updateSubjects/{teacher_id}/{class_id}', [AssignController::class, 'updateTeacherSubjects'])->name('updateSubjects');
 // });
 
 Route::middleware(['auth', 'user-role:admin'])->group(function(){

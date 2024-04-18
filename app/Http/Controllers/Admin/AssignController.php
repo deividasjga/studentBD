@@ -13,6 +13,7 @@ class AssignController extends Controller
     {
         $teachers = User::where('role', 'teacher')->get();
         $teachers->load('teacherClasses');
+        $teachers->load('teacherSubjects');
         
         return view('admin.teachers.indexAssign', compact('teachers'));
     }
@@ -29,5 +30,26 @@ class AssignController extends Controller
         $teacher = User::findOrFail($id);
         $teacher->teacherClasses()->sync($request->input('classes', []));
         return redirect()->route('indexAssign')->with('success', 'Classes assigned to teacher successfully.');
+    }
+
+
+    public function assignTeacherSubjects(Request $request, $teacherId, $classId)
+    {
+        $teacher = User::findOrFail($teacherId);
+        $class = ClassModel::findOrFail($classId);
+        $subjects = $class->subjects()->get();
+        return view('admin.teachers.assignSubject', compact('teacher', 'subjects', 'class'));
+    }
+
+
+    public function updateTeacherSubjects(Request $request, $teacherId, $classId)
+    {
+        $teacher = User::findOrFail($teacherId);
+        $subjects = $request->input('subjects', []);
+        $teacher->teacherSubjects()->detach();
+        foreach ($subjects as $subjectId) {
+            $teacher->teacherSubjects()->attach($subjectId, ['class_id' => $classId]);
+        }
+        return redirect()->route('indexAssign')->with('success', 'Subjects assigned to teacher successfully.');
     }
 }
