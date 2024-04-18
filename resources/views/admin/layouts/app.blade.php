@@ -229,6 +229,13 @@ Users
 </a>
 </li>
 
+<li class="nav-item">
+<a href="{{ route('indexAssign') }}" class="nav-link {{ Request::is('teachersAssign') ? 'active' : '' }}">
+<i class="nav-icon fas fa-address-book"></i>
+<p>Assign Teachers</p>
+</a>
+</li>
+
 
 </li>
 

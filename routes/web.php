@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ParentController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AssignController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,12 @@ Auth::routes();
     Route::put('api/classes/{class}', [ClassController::class, 'update']);
     Route::delete('api/classes/{class}', [ClassController::class, 'destroy']);
     Route::get('api/classes/getClass/{id}', [ClassController::class, 'getClass']);
+
+
+////
+    Route::get('/teachersAssign', [AssignController::class, 'teacherAssignList'])->name('indexAssign');
+    Route::get('/teachers/assignClasses/{id}', [AssignController::class, 'assignTeacherClasses'])->name('assignClass');
+    Route::post('/teachers/updateClasses/{id}', [AssignController::class, 'updateTeacherClasses'])->name('updateClass');
 // });
 
 Route::middleware(['auth', 'user-role:admin'])->group(function(){
