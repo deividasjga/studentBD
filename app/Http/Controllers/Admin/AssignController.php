@@ -32,24 +32,25 @@ class AssignController extends Controller
         return redirect()->route('indexAssign')->with('success', 'Classes assigned to teacher successfully.');
     }
 
-
     public function assignTeacherSubjects(Request $request, $teacherId, $classId)
     {
         $teacher = User::findOrFail($teacherId);
         $class = ClassModel::findOrFail($classId);
-        $subjects = $class->subjects()->get();
-        return view('admin.teachers.assignSubject', compact('teacher', 'subjects', 'class'));
+        $assignedSubjects = $teacher->teacherSubjects()->wherePivot('class_id', $classId)->get();
+        $allSubjects = $class->subjects()->get();
+        return view('admin.teachers.assignSubject', compact('teacher', 'assignedSubjects', 'allSubjects', 'class'));
     }
 
 
     public function updateTeacherSubjects(Request $request, $teacherId, $classId)
-    {
-        $teacher = User::findOrFail($teacherId);
-        $subjects = $request->input('subjects', []);
-        $teacher->teacherSubjects()->detach();
-        foreach ($subjects as $subjectId) {
-            $teacher->teacherSubjects()->attach($subjectId, ['class_id' => $classId]);
-        }
-        return redirect()->route('indexAssign')->with('success', 'Subjects assigned to teacher successfully.');
+{
+    $teacher = User::findOrFail($teacherId);
+    $subjects = $request->input('subjects', []);
+    $teacher->teacherSubjects()->wherePivot('class_id', $classId)->detach();
+    foreach ($subjects as $subjectId) {
+        $teacher->teacherSubjects()->attach($subjectId, ['class_id' => $classId]);
     }
+
+    return redirect()->route('indexAssign')->with('success', 'Subjects assigned to teacher successfully.');
+}
 }

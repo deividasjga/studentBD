@@ -7,9 +7,9 @@
             @csrf
             <div class="form-group">
                 <label for="classes">Select Subjects:</label>
-                <select class="form-control" id="subjects" name="subjects[]" multiple>
-                    @foreach ($subjects as $subject)
-                        <option value="{{ $subject->id }}" {{ $teacher->teacherSubjects->contains($subject->id) ? 'selected' : '' }}>
+                <select class="form-control" name="subjects[]" multiple>
+                    @foreach ($allSubjects as $subject)
+                        <option value="{{ $subject->id }}" {{ $assignedSubjects->contains($subject) ? 'selected' : '' }}>
                             {{ $subject->name }}
                         </option>
                     @endforeach

@@ -61,7 +61,7 @@ class User extends Authenticatable
 
     public function teacherSubjects()
     {
-        return $this->belongsToMany(SubjectModel::class, 'teacher_subject', 'teacher_id', 'subject_id')->withPivot('class_id');
+        return $this->belongsToMany(SubjectModel::class, 'teacher_subject', 'teacher_id', 'subject_id')->withPivot('class_id')->withTimestamps();;
     }
 
 }

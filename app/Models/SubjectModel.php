@@ -20,7 +20,7 @@ class SubjectModel extends Model
 
     public function teachers()
     {
-        return $this->belongsToMany(User::class, 'teacher_subject', 'subject_id', 'teacher_id')->withPivot('class_id');
+        return $this->belongsToMany(User::class, 'teacher_subject', 'subject_id', 'teacher_id')->withPivot('class_id')->withTimestamps();;
     }
 
 }
