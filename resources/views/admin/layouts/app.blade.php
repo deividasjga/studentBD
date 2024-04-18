@@ -181,6 +181,8 @@ Nora Silvester
 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
 <li class="nav-item menu-open">
+@auth
+@if(Auth::user()->role === 'admin')
 <a href="#" class="nav-link" >
 <i class="nav-icon fas fa-users"></i>
 <p>
@@ -235,8 +237,19 @@ Users
 <p>Assign Teachers</p>
 </a>
 </li>
+@elseif(Auth::user()->role === 'teacher')
+<li class="nav-item">
+<a href="" class="nav-link">
+<i class="nav-icon fas fa-chalkboard"></i>
+<p>111</p>
+</a>
+</li>
+@elseif(Auth::user()->role === 'student')
 
+@elseif(Auth::user()->role === 'parent')
 
+@endif
+@endauth
 </li>
 
 <li class="nav-item">
