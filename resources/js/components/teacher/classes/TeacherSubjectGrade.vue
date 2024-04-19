@@ -1,27 +1,155 @@
 <template>
-    <div>
-      <h2>User ID: {{ user_id }}</h2>
-      <h2>Class ID: {{ class_id }}</h2>
-      <h2>Subject ID: {{ subject_id }}</h2>
+      
+  <div class="container">
+    <div class="grades-table-wrapper" ref="tableWrapper">  
+      <div class="grades-table">
+        <table>
+          <thead>
+            <tr>
+              <th class="student-info">Student</th>
+              <th class="action-info">Action</th>
+              <th v-for="date in dates" :key="date">{{ date }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(student, index) in students" :key="student.id">
+              <td class="student-info">{{ index + 1 }}. {{ student.first_name }} {{ student.last_name }}</td>
+              <td class="action-info">s</td>
+              <td v-for="date in dates" :key="date">
+              <input type="text" :value="studentGrades[index][date]" readonly>
+            </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      user_id: {
-        type: Number,
-        required: true
-      },
-      class_id: {
-        type: Number,
-        required: true
-      },
-      subject_id: {
-        type: Number,
-        required: true
-      }
+  </div>
+</template>
+
+
+<script>
+export default {
+  props: {
+    user_id: {
+      type: Number,
+      required: true
+    },
+    class_id: {
+      type: Number,
+      required: true
+    },
+    subject_id: {
+      type: Number,
+      required: true
     }
-  };
-  </script>
-  
+  },
+  data() {
+    return {
+      students: [],
+      dates: [],
+      studentGrades: []
+    };
+  },
+  mounted() {
+    this.fetchStudents();
+    this.generateDates();
+    this.fetchStudentsGrades();
+  },
+  methods: {
+    async fetchStudents() {
+      try {
+        const response = await axios.get(`/api/teacher-classes/${this.class_id}/${this.subject_id}/students`);
+        this.students = response.data;
+
+        this.studentGrades = this.students.map(student => ({
+          id: student.id,
+          grades: Object.fromEntries(this.dates.map(date => [date, '']))
+        }));
+        this.$refs.tableWrapper.scrollLeft = this.$refs.tableWrapper.scrollWidth;
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      }
+    },
+    generateDates() {
+      const today = new Date();
+      const dates = [];
+
+      for (let i = 0; i < 90; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        const formattedDate = date.toISOString().slice(0, 10);
+        dates.unshift(formattedDate);
+      }
+      this.dates = dates;
+    },
+    async fetchStudentsGrades() {
+    try {
+      const response = await axios.get(`/api/teacher-classes/${this.class_id}/${this.subject_id}/studentsGrades`);
+      const allStudentsGrades = response.data;
+      allStudentsGrades.forEach(studentGrade => {
+        const studentIndex = this.students.findIndex(student => student.id === studentGrade.student_id);
+        if (studentIndex !== -1) {
+          const dateIndex = this.dates.findIndex(date => date === studentGrade.grade_date);
+          if (dateIndex !== -1) {
+            if (this.studentGrades[studentIndex][this.dates[dateIndex]]) {
+              this.studentGrades[studentIndex][this.dates[dateIndex]] += `, ${studentGrade.grade}`;
+            } else {
+              this.studentGrades[studentIndex][this.dates[dateIndex]] = studentGrade.grade;
+            }
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching students grades:', error);
+    }
+  }
+  }
+};
+</script>
+
+<style scoped>
+.container {
+  display: flex;
+}
+
+.grades-table-wrapper {
+  flex: 1;
+  overflow-x: auto;
+}
+
+.grades-table {
+  width: max-content;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  padding: 10px;
+}
+
+.student-info, .action-info {
+  position: sticky;
+}
+
+.student-info {
+  left: 0;
+  background-color: white;
+  z-index: 2;
+}
+
+.action-info {
+  left: 185px;
+  background-color: white;
+  z-index: 2;
+}
+
+thead th {
+  text-align: left;
+}
+
+input[type="text"] {
+  width: 50px;
+}
+</style>

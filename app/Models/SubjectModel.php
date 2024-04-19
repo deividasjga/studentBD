@@ -23,4 +23,9 @@ class SubjectModel extends Model
         return $this->belongsToMany(User::class, 'teacher_subject', 'subject_id', 'teacher_id')->withPivot('class_id')->withTimestamps();;
     }
 
+    public function grades()
+    {
+        return $this->hasMany(GradeModel::class, 'subject_id');
+    }
+
 }

@@ -23,4 +23,9 @@ class ClassModel extends Model
         return $this->belongsToMany(User::class, 'class_teacher', 'class_id', 'teacher_id');
     }
 
+    public function grades()
+    {
+        return $this->hasMany(GradeModel::class, 'class_id');
+    }
+
 }

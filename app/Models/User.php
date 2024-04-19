@@ -64,4 +64,14 @@ class User extends Authenticatable
         return $this->belongsToMany(SubjectModel::class, 'teacher_subject', 'teacher_id', 'subject_id')->withPivot('class_id')->withTimestamps();;
     }
 
+    public function studentGrades()
+    {
+        return $this->hasMany(GradeModel::class, 'student_id');
+    }
+
+    public function teacherGrades()
+    {
+        return $this->hasMany(GradeModel::class, 'teacher_id');
+    }
+
 }

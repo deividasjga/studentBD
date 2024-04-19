@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ParentController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AssignController;
 use App\Http\Controllers\Teacher\TeacherClassController;
+use App\Http\Controllers\Teacher\StudentGradesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,6 @@ use App\Http\Controllers\Teacher\TeacherClassController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 
 Route::get('/', function () {
     return view('welcome');
@@ -112,7 +112,11 @@ Route::middleware(['auth', 'user-role:teacher'])->group(function(){
     Route::get('/teacher-classes/{user_id}/{class_id}/{subject_id}', [TeacherClassController::class, 'subjectGradeList'])
         ->name('subjectGrading');
     Route::get('/teacher-classes', [TeacherClassController::class, 'getTeacherClasses'])->name('teacherClassList');
-    
+    Route::get('/api/teacher-classes/{class_id}/{subject_id}/students', [StudentGradesController::class, 'getStudents']);
+    Route::get('/api/teacher-classes/{class_id}/{subject_id}/studentsGrades', [StudentGradesController::class, 'getStudentsGrades']);
+
+    Route::get('/api/grades/create',  [StudentGradesController::class, 'create']);
+    Route::post('/api/grades', [StudentGradesController::class, 'store']);
 });
 
 Route::middleware(['auth', 'user-role:parent'])->group(function(){
