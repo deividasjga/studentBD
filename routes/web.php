@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ParentController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AssignController;
+use App\Http\Controllers\Teacher\TeacherClassController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,6 +108,10 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
 });
 
 Route::middleware(['auth', 'user-role:teacher'])->group(function(){
+    Route::get('/api/teacher/{teacher_id}/classes', [TeacherClassController::class, 'getTeacherClasses']);
+    Route::get('/teacher-classes/{user_id}/{class_id}/{subject_id}', [TeacherClassController::class, 'subjectGradeList'])
+        ->name('subjectGrading');
+    Route::get('/teacher-classes', [TeacherClassController::class, 'getTeacherClasses'])->name('teacherClassList');
     
 });
 

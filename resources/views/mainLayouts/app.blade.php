@@ -239,9 +239,9 @@ Users
 </li>
 @elseif(Auth::user()->role === 'teacher')
 <li class="nav-item">
-<a href="" class="nav-link">
+<a href="{{ route('teacherClassList') }}" class="nav-link {{ Request::is('teacher-classes') ? 'active' : '' }}">
 <i class="nav-icon fas fa-chalkboard"></i>
-<p>111</p>
+<p>My classes</p>
 </a>
 </li>
 @elseif(Auth::user()->role === 'student')
