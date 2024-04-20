@@ -1,5 +1,4 @@
 <template>
-      
   <div class="container">
     <div class="grades-table-wrapper" ref="tableWrapper">  
       <div class="grades-table">
@@ -14,10 +13,12 @@
           <tbody>
             <tr v-for="(student, index) in students" :key="student.id">
               <td class="student-info">{{ index + 1 }}. {{ student.first_name }} {{ student.last_name }}</td>
-              <td class="action-info">s</td>
+              <td class="action-info">
+                <a href="#" @click.prevent="saveGrades(index)"><i class="fas fa-save"></i> Save</a>
+              </td>
               <td v-for="date in dates" :key="date">
-              <input type="text" :value="studentGrades[index][date]" readonly>
-            </td>
+                <input type="text" v-model="studentGrades[index][date]" placeholder="Grade">
+              </td>
             </tr>
           </tbody>
         </table>
@@ -26,8 +27,10 @@
   </div>
 </template>
 
-
 <script>
+import { useToastr } from '../../../toastr.js';
+const toastr = useToastr();
+
 export default {
   props: {
     user_id: {
@@ -83,26 +86,58 @@ export default {
       this.dates = dates;
     },
     async fetchStudentsGrades() {
+      try {
+        const response = await axios.get(`/api/teacher-classes/${this.class_id}/${this.subject_id}/studentsGrades`);
+        const allStudentsGrades = response.data;
+        allStudentsGrades.forEach(studentGrade => {
+          const studentIndex = this.students.findIndex(student => student.id === studentGrade.student_id);
+          if (studentIndex !== -1) {
+            const dateIndex = this.dates.findIndex(date => date === studentGrade.grade_date);
+            if (dateIndex !== -1) {
+              if (this.studentGrades[studentIndex][this.dates[dateIndex]]) {
+                this.studentGrades[studentIndex][this.dates[dateIndex]] += `, ${studentGrade.grade}`;
+              } else {
+                this.studentGrades[studentIndex][this.dates[dateIndex]] = studentGrade.grade;
+              }
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching students grades:', error);
+      }
+    },
+    async saveGrades(studentIndex) {
     try {
-      const response = await axios.get(`/api/teacher-classes/${this.class_id}/${this.subject_id}/studentsGrades`);
-      const allStudentsGrades = response.data;
-      allStudentsGrades.forEach(studentGrade => {
-        const studentIndex = this.students.findIndex(student => student.id === studentGrade.student_id);
-        if (studentIndex !== -1) {
-          const dateIndex = this.dates.findIndex(date => date === studentGrade.grade_date);
-          if (dateIndex !== -1) {
-            if (this.studentGrades[studentIndex][this.dates[dateIndex]]) {
-              this.studentGrades[studentIndex][this.dates[dateIndex]] += `, ${studentGrade.grade}`;
-            } else {
-              this.studentGrades[studentIndex][this.dates[dateIndex]] = studentGrade.grade;
+      const student = this.students[studentIndex];
+      const grades = this.studentGrades[studentIndex];
+      const gradeData = [];
+
+      for (const date in grades) {
+        if (grades.hasOwnProperty(date) && date !== 'id' && date !== 'grades') {
+          const gradeArray = grades[date].split(',').map(g => g.trim());
+          for (const grade of gradeArray) {
+            if (grade) {
+              gradeData.push({
+                teacher_id: this.user_id,
+                student_id: student.id,
+                class_id: this.class_id,
+                subject_id: this.subject_id,
+                grade_date: date,
+                grade: grade
+              });
             }
           }
         }
-      });
+      }
+      await axios.post('/api/save-grades', gradeData);
+
+      toastr.success('Grades saved successfully.');
     } catch (error) {
-      console.error('Error fetching students grades:', error);
+        toastr.error('Failed to save grades.');
     }
   }
+
+
   }
 };
 </script>

@@ -114,9 +114,7 @@ Route::middleware(['auth', 'user-role:teacher'])->group(function(){
     Route::get('/teacher-classes', [TeacherClassController::class, 'getTeacherClasses'])->name('teacherClassList');
     Route::get('/api/teacher-classes/{class_id}/{subject_id}/students', [StudentGradesController::class, 'getStudents']);
     Route::get('/api/teacher-classes/{class_id}/{subject_id}/studentsGrades', [StudentGradesController::class, 'getStudentsGrades']);
-
-    Route::get('/api/grades/create',  [StudentGradesController::class, 'create']);
-    Route::post('/api/grades', [StudentGradesController::class, 'store']);
+    Route::post('/api/save-grades',  [StudentGradesController::class, 'saveGrades']);
 });
 
 Route::middleware(['auth', 'user-role:parent'])->group(function(){
