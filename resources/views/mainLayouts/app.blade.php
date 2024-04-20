@@ -245,6 +245,12 @@ Users
 </a>
 </li>
 @elseif(Auth::user()->role === 'student')
+<li class="nav-item">
+<a href="{{ route('studentGrades') }}" class="nav-link {{ Request::is('student/grades') ? 'active' : '' }}">
+<i class="nav-icon fas fa-book"></i>
+<p>My grades</p>
+</a>
+</li>
 
 @elseif(Auth::user()->role === 'parent')
 

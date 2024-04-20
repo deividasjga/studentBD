@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AssignController;
 use App\Http\Controllers\Teacher\TeacherClassController;
 use App\Http\Controllers\Teacher\StudentGradesController;
+use App\Http\Controllers\Student\GradeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,7 +105,12 @@ Route::middleware(['auth', 'user-role:admin'])->group(function(){
 });
 
 Route::middleware(['auth', 'user-role:student'])->group(function(){
-    
+    Route::get('/student/grades', function () {
+        return view('student.grades.studentGrades');
+    })->name('studentGrades');
+    Route::get('/api/getStudent/{userId}', [GradeController::class, 'getStudent']);
+    Route::get('/api/getClass/{classId}', [GradeController::class, 'getClass']);
+    Route::get('/api/getStudentGrades/{studentId}', [GradeController::class, 'getStudentGrades']);
 });
 
 Route::middleware(['auth', 'user-role:teacher'])->group(function(){

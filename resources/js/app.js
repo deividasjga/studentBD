@@ -15,6 +15,7 @@ import TeacherList from './components/admin/teachers/TeacherList.vue';
 import ParentList from './components/admin/parents/ParentList.vue';
 import AdminList from './components/admin/admins/AdminList.vue';
 import TeacherSubjectGrade from './components/teacher/classes/TeacherSubjectGrade.vue';
+import GradeList from './components/student/GradeList.vue';
 
 const app = createApp({});
 
@@ -32,6 +33,7 @@ app.component('test-component', Test)
     .component('teacher-list-component', TeacherList)
     .component('parent-list-component', ParentList)
     .component('admin-list-component', AdminList)
-    .component('teacher-subject-grading-component', TeacherSubjectGrade);
+    .component('teacher-subject-grading-component', TeacherSubjectGrade)
+    .component('student-grades-component', GradeList);
 
 app.mount('#app');
