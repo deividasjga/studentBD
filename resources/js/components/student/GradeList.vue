@@ -25,12 +25,13 @@
                 <table class="table table-sm">
                 <thead class="thead-dark">
                     <tr>
-                    <th scope="col">#</th>
+                    <th scope="col" style="width: 35px">#</th>
                     <th scope="col">Subject Name</th>
                     <th scope="col">Grades</th>
+                    <th scope="col">Average Grade</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="table-bordered">
                     <tr v-for="(subject, index) in classOne.subjects" :key="subject.id">
                     <td>{{ index + 1 }}</td>
                     <td>{{ subject.name }}</td>
@@ -42,8 +43,15 @@
                         </ul>
                         <p v-else>No grades available</p>
                     </td>
+                    <td style="font-weight: bold;">{{ calculateAverage(subject.id) }}</td>
                     </tr>
                 </tbody>
+                <tfoot>
+          <tr>
+            <td colspan="3" class="text-right"><b style="font-size: 1.1rem;">Total Average:</b></td>
+            <td style="font-weight: bold;">{{ calculateTotalAverage() }}</td>
+          </tr>
+        </tfoot>
                 </table>
             </div>
             </div>
@@ -110,6 +118,18 @@ methods: {
     },
     getSubjectGrades(subjectId) {
         return this.studentGradesList.filter(grade => grade.subject_id === subjectId);
+    },
+    calculateAverage(subjectId) {
+        const grades = this.getSubjectGrades(subjectId).filter(grade => !isNaN(parseFloat(grade.grade)));
+        if (grades.length === 0) return 0;
+        const sum = grades.reduce((acc, grade) => acc + parseFloat(grade.grade), 0);
+        return sum / grades.length;
+    },
+    calculateTotalAverage() {
+        const allGrades = this.studentGradesList.filter(grade => !isNaN(parseFloat(grade.grade)));
+        if (allGrades.length === 0) return 0;
+        const sum = allGrades.reduce((acc, grade) => acc + parseFloat(grade.grade), 0);
+        return sum / allGrades.length;
     }
 }
 };
