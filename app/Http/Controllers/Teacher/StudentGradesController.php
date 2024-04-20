@@ -30,7 +30,7 @@ class StudentGradesController extends Controller
 
         return response()->json($grades);
     }
-    
+
 
     public function saveGrades(Request $request)
     {
@@ -38,8 +38,13 @@ class StudentGradesController extends Controller
         
         try {
             $studentId = $gradesData[0]['student_id'];
+            $subjectIds = array_unique(array_column($gradesData, 'subject_id'));
+            $classIds = array_unique(array_column($gradesData, 'class_id'));
             
-            GradeModel::where('student_id', $studentId)->delete();
+            GradeModel::where('student_id', $studentId)
+                ->whereIn('subject_id', $subjectIds)
+                ->whereIn('class_id', $classIds)
+                ->delete();
     
             foreach ($gradesData as $gradeData) {
                 $teacherId = $gradeData['teacher_id'];
@@ -63,5 +68,9 @@ class StudentGradesController extends Controller
             return response()->json(['error' => 'Failed to save grades', 'message' => $e->getMessage()], 500);
         }
     }
+    
+    
+    
+
 
 }
