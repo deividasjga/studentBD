@@ -34,10 +34,12 @@
                 <tbody class="table-bordered">
                     <tr v-for="(subject, index) in classOne.subjects" :key="subject.id">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ subject.name }}</td>
+                    <td :title="'Subject: ' + subject.name">{{ subject.name }}</td>
                     <td>
                         <ul v-if="getSubjectGrades(subject.id).length > 0">
-                        <li v-for="grade in getSubjectGrades(subject.id)" :key="grade.id">
+                        <li v-for="grade in getSubjectGrades(subject.id)" :key="grade.id"
+                                                     :title="'Grade: ' + grade.grade +'\nDate: ' + grade.grade_date"
+                                                     :class="{ 'text-danger': isNaN(parseFloat(grade.grade)) }">
                             {{ grade.grade }}
                         </li>
                         </ul>
