@@ -237,6 +237,14 @@ Users
 <p>Assign Teachers</p>
 </a>
 </li>
+
+<li class="nav-item">
+<a href="{{ route('challengeList') }}" class="nav-link {{ Request::is('admin/challenges') ? 'active' : '' }}">
+<i class="nav-icon fas fa-bullseye"></i>
+<p>Challenges</p>
+</a>
+</li>
+
 @elseif(Auth::user()->role === 'teacher')
 <li class="nav-item">
 <a href="{{ route('teacherClassList') }}" class="nav-link {{ Request::is('teacher-classes') ? 'active' : '' }}">

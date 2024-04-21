@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AssignController;
 use App\Http\Controllers\Teacher\TeacherClassController;
 use App\Http\Controllers\Teacher\StudentGradesController;
 use App\Http\Controllers\Student\GradeController;
+use App\Http\Controllers\Admin\AdminChallengeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,6 +80,8 @@ Route::middleware(['auth', 'user-role:admin'])->group(function(){
     Route::get('/teachers/assignSubjects/{teacher_id}/{class_id}', [AssignController::class, 'assignTeacherSubjects'])->name('assignSubjects');
     Route::post('/teachers/updateSubjects/{teacher_id}/{class_id}', [AssignController::class, 'updateTeacherSubjects'])->name('updateSubjects');
 
+    Route::get('/api/admin/challenges', [AdminChallengeController::class, 'index']);
+
     Route::get('/StudentList', function () {
         return view('admin.students.StudentList');
     })->name('StudentList');
@@ -102,6 +105,10 @@ Route::middleware(['auth', 'user-role:admin'])->group(function(){
     Route::get('/classes', function () {
         return view('admin.classes.classList');
     })->name('classList');
+
+    Route::get('/admin/challenges', function () {
+        return view('admin.challenges.challengeList');
+    })->name('challengeList');
 });
 
 Route::middleware(['auth', 'user-role:student'])->group(function(){

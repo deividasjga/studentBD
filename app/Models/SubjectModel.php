@@ -28,4 +28,9 @@ class SubjectModel extends Model
         return $this->hasMany(GradeModel::class, 'subject_id');
     }
 
+    public function challenges()
+    {
+        return $this->hasMany(Challenge::class);
+    }
+
 }
