@@ -81,6 +81,9 @@ Route::middleware(['auth', 'user-role:admin'])->group(function(){
     Route::post('/teachers/updateSubjects/{teacher_id}/{class_id}', [AssignController::class, 'updateTeacherSubjects'])->name('updateSubjects');
 
     Route::get('/api/admin/challenges', [AdminChallengeController::class, 'index']);
+    Route::post('/api/admin/challenges', [AdminChallengeController::class, 'store']);
+    Route::put('/api/admin/challenges/{id}', [AdminChallengeController::class, 'update']);
+    Route::delete('/api/admin/challenges/{id}', [AdminChallengeController::class, 'destroy']);
 
     Route::get('/StudentList', function () {
         return view('admin.students.StudentList');
