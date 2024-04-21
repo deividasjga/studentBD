@@ -18,7 +18,12 @@ class ChallengeModel extends Model
 
     public function subject()
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsTo(SubjectModel::class);
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'student_challenge')->withPivot('completed');
     }
 
 }

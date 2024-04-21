@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChallengeModel;
+use App\Models\StudentChallengeModel;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -61,6 +63,28 @@ class AdminChallengeController extends Controller
         $challenge->delete();
 
         return response()->json(['message' => 'Challenge deleted successfully'], 200);
+    }
+
+
+    public function assignChallengeToAllStudents(Request $request)
+    {
+        $request->validate([
+            'challenge_id' => 'required|exists:challenge,id',
+        ]);
+        
+        $challenge_id = $request->input('challenge_id');
+        
+        $students = User::where('role', 'student')->get();
+
+        foreach ($students as $student) {
+            StudentChallengeModel::create([
+                'student_id' => $student->id,
+                'challenge_id' => $challenge_id,
+                'completed' => false,
+            ]);
+        }
+
+        return response()->json(['message' => 'Challenge assigned to all students successfully'], 201);
     }
 
 

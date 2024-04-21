@@ -74,4 +74,9 @@ class User extends Authenticatable
         return $this->hasMany(GradeModel::class, 'teacher_id');
     }
 
+        public function challenges()
+        {
+            return $this->belongsToMany(ChallengeModel::class, 'student_challenge')->withPivot('completed');
+        }
+
 }

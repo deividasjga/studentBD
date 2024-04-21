@@ -30,7 +30,7 @@ class SubjectModel extends Model
 
     public function challenges()
     {
-        return $this->hasMany(Challenge::class);
+        return $this->hasMany(ChallengeModel::class);
     }
 
 }

@@ -43,8 +43,9 @@
             <td>{{ challengeItem.description }}</td>
             <td>{{ challengeItem.reward_points }}</td>
             <td>
-            <a href="#" @click.prevent="openClassFormModal(challengeItem)"><i class="fa fa-edit"></i></a>
-            <a href="#" @click.prevent="deleteChallenge(challengeItem.id)"><i class="fa fa-trash text-danger ml-2"></i></a>
+                <button @click="assignChallengeToAllStudents(challengeItem.id)" type="button" class="btn btn-sm btn-secondary mr-2" data-dismiss="modal">Assign to all students</button>    
+                <a href="#" @click.prevent="openClassFormModal(challengeItem)"><i class="fa fa-edit"></i></a>
+                <a href="#" @click.prevent="deleteChallenge(challengeItem.id)" class="ml-2"><i class="fa fa-trash text-danger"></i></a>
             </td>
         </tr>
         </tbody>
@@ -254,7 +255,19 @@ methods: {
             console.error('Error deleting challenge:', error);
         });
         }
-    }
+    },
+    assignChallengeToAllStudents(challengeId) {
+    axios.post('/api/admin/assignChallengeToAllStudents', {
+            challenge_id: challengeId
+        })
+        .then(response => {
+            console.log(response.data.message);
+        })
+        .catch(error => {
+            console.error('Error assigning challenge to all students:', error);
+        });
+}
+
 }
 };
 </script>
