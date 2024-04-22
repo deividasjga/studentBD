@@ -119,6 +119,15 @@
         }
     },
     isChallengeCompleted(challenge) {
+        if (challenge.challenge_type === 1) {
+            const grades = this.student.studentGrades.filter(grade =>
+                grade.subject_id === challenge.subject_id &&
+                grade.grade_date <= challenge.end_date
+            );
+            const sum = grades.reduce((total, grade) => total + parseInt(grade.grade),0);
+            const average = sum/grades.length;
+            return average > challenge.minimum_grade;
+        }
         if (challenge.challenge_type === 2) {
             const requiredCount = challenge.grade_count;
             const grades = this.student.studentGrades.filter(
@@ -144,10 +153,11 @@
             });
             return !hasGradeN;
             }
-        return false;
         }
+        return false;
     },
     async makeChallengeCompleted(challenge) {
+        console.log('woww');
         const studentChallenge = challenge.student_challenges.find(
             (sc) => sc.student_id === this.userId
         );
