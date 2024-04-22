@@ -32,4 +32,15 @@ class ChallengeController extends Controller
         
         return response()->json($challenges);
     }
+
+
+    public function updateStudentChallenge($studentChallengeId, Request $request)
+    {
+        $studentChallenge = StudentChallengeModel::findOrFail($studentChallengeId);
+        
+        $studentChallenge->completed = $request->completed;
+        $studentChallenge->save();
+        
+        return response()->json($studentChallenge);
+    }
 }
