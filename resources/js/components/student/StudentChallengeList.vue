@@ -42,6 +42,7 @@
   
   <script>
   import axios from "axios";
+  import { formatDateDash } from '../../helper.js';
   
   export default {
     props: {
@@ -131,6 +132,19 @@
                 }
             );
             return grades.length >= requiredCount;
+        }
+        if (challenge.challenge_type === 3) {
+            const today = formatDateDash(new Date());
+            if(today >= challenge.end_date) {
+                const hasGradeN = this.student.studentGrades.some(grade => {
+                const meetsCondition = grade.grade_date >= challenge.start_date &&
+                                        grade.grade_date <= challenge.end_date &&
+                                        grade.grade === 'n';
+                return meetsCondition;
+            });
+            return !hasGradeN;
+            }
+        return false;
         }
     },
     async makeChallengeCompleted(challenge) {

@@ -6,3 +6,12 @@ export const formatDate = (dateString) => {
         day: 'numeric'
     });
 };
+
+export const formatDateDash = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-CA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+};
