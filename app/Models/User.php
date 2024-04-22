@@ -79,4 +79,9 @@ class User extends Authenticatable
         return $this->belongsToMany(ChallengeModel::class, 'student_challenge', 'student_id', 'challenge_id')->withPivot('completed');
     }
 
+    public function points()
+    {
+        return $this->hasMany(PointModel::class, 'student_id');
+    }
+
 }

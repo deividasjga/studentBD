@@ -10,6 +10,7 @@ use App\Models\ChallengeModel;
 use App\Models\StudentChallengeModel;
 use App\Models\SubjectModel;
 use App\Models\GradeModel;
+use App\Models\PointModel;
 use Illuminate\Support\Facades\Validator;
 
 class ChallengeController extends Controller
@@ -40,7 +41,18 @@ class ChallengeController extends Controller
         
         $studentChallenge->completed = $request->completed;
         $studentChallenge->save();
+
+        $challenge = $studentChallenge->challenge;
+        $points = $challenge->reward_points;
+        $existingPoints = PointModel::where('student_id', $studentChallenge->student_id)->sum('points');
+        $totalPoints = $existingPoints + $points;
+
+        PointModel::updateOrCreate(
+            ['student_id' => $studentChallenge->student_id],
+            ['points' => $totalPoints]
+        );
         
         return response()->json($studentChallenge);
     }
+    
 }
