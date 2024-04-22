@@ -14,6 +14,7 @@ use App\Http\Controllers\Teacher\TeacherClassController;
 use App\Http\Controllers\Teacher\StudentGradesController;
 use App\Http\Controllers\Student\GradeController;
 use App\Http\Controllers\Admin\AdminChallengeController;
+use App\Http\Controllers\Student\ChallengeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -123,6 +124,12 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
     Route::get('/api/getStudent/{userId}', [GradeController::class, 'getStudent']);
     Route::get('/api/getClass/{classId}', [GradeController::class, 'getClass']);
     Route::get('/api/getStudentGrades/{studentId}', [GradeController::class, 'getStudentGrades']);
+
+    Route::get('/api/student/challenges/{studentId}', [ChallengeController::class, 'getMyChallenges']);
+
+    Route::get('/student/challenges', function () {
+        return view('student.challenges.studentChallengeList');
+    })->name('studentChallengeList');
 });
 
 Route::middleware(['auth', 'user-role:teacher'])->group(function(){

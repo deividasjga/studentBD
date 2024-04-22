@@ -23,7 +23,12 @@ class ChallengeModel extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class, 'student_challenge')->withPivot('completed');
+        return $this->belongsToMany(User::class, 'student_challenge', 'challenge_id', 'student_id')->withPivot('completed');
+    }
+
+    public function studentChallenges()
+    {
+        return $this->hasMany(StudentChallengeModel::class, 'challenge_id');
     }
 
 }

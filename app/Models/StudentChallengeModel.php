@@ -24,6 +24,6 @@ class StudentChallengeModel extends Model
 
     public function challenge()
     {
-        return $this->belongsTo(ChallengeModel::class);
+        return $this->belongsTo(ChallengeModel::class, 'challenge_id');
     }
 }
