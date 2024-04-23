@@ -58,61 +58,39 @@
     </div>
 
 
-<div class="modal fade" id="editModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">{{ isNewReward ? 'Create Reward' : 'Edit Reward' }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="rewardName" class="form-label">Reward Name</label>
-                <input type="text" v-model="editReward.name" class="form-control" id="rewardName">
-            </div>
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">{{ purchased ? 'Purchased' : 'Confirm Purchase' }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div v-if="!purchased">
+          <p style="margin-bottom: 20px">Are you sure you want to buy this reward for {{ rewardItem ? rewardItem.points_price : '-' }} <i class="far fa-gem"></i> ?</p>
+          <p><strong>Name:</strong> {{ rewardItem ? rewardItem.name : '-' }}</p>
+          <p><strong>Description:</strong> {{ rewardItem ? rewardItem.description : '-' }}</p>
         </div>
-        <div class="col-md-6">
-        <div class="form-group">
-            <label for="rewardDescription" class="form-label">Description</label>
-            <input type="text" v-model="editReward.description" class="form-control" id="rewardDescription">
+        <div v-else>
+          <div class="alert alert-success" role="alert">
+            Successfully purchased!
+          </div>
+          <div class="reward-code-container">
+            <h5>{{ rewardItem.name }} code:</h5>
+            <div class="reward-code">{{ rewardItem.code }}</div>
+            <p style="margin-top: 10px">Valid until: {{ rewardItem.valid_until }}</p>
+          </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button v-if="!purchased" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button v-else type="button" class="btn btn-secondary" @click="closeModal">Close</button>
+        <button v-if="!purchased" type="button" class="btn btn-primary" @click="buyReward">Buy</button>
+      </div>
     </div>
-        
-    </div>
-
-    <div class="row">
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="rewardPointsPrice" class="form-label">Points price</label>
-            <input type="number" v-model="editReward.points_price" class="form-control" id="rewardPointsPrice">
-        </div>
-    </div>
-    <div class="col-md-6">
-            <div class="form-group">
-                <label for="rewardCode" class="form-label">Reward code</label>
-                <input type="text" v-model="editReward.code" class="form-control" id="rewardCode">
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="rewardValidUntil" class="form-label">Valid until</label>
-                <input type="date" v-model="editReward.valid_until" class="form-control" id="rewardValidUntil">
-            </div>
-        </div>  
-</div>
-
-
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button @click="saveChanges" class="btn btn-primary">{{ isNewReward ? 'Create' : 'Save Changes' }}</button>
-</div>
-</div>
-</div>
+  </div>
 </div>
 
 </template>
@@ -141,7 +119,9 @@ data() {
     },
     editReward: { name: '' },
     isNewReward: false,
-    points: 0
+    points: 0,
+    rewardItem: null,
+    purchased: false
     };
 },
 created() {
@@ -153,7 +133,7 @@ methods: {
     async decryptCode() {
         try {
             const response = await axios.post('/api/decrypt-code', { code: this.givenCode });
-            this.editReward.code = response.data;
+            this.rewardItem.code = response.data;
         } catch (error) {
             console.error('Error decrypting code:', error);
         }
@@ -178,7 +158,40 @@ methods: {
     } catch (error) {
         console.error('Error fetching points:', error);
     }
+    },
+    openConfirmRewardModal(rewardItem) {
+        this.rewardItem = rewardItem;
+        const requiredPoints = rewardItem.points_price;
+        if (this.points >= requiredPoints) {
+            this.purchased = false;
+            $('#confirmModal').modal('show');
+        } else {
+            toastr.info('Not enough points');
+        }
+    },
+    async buyReward() {
+    try {
+        const response = await axios.post('/api/student/points/subtract', {
+            userId: this.userId,
+            points_price: this.rewardItem.points_price
+        });
+
+        if (response.status === 200) {
+            this.givenCode = this.rewardItem.code;
+            this.fetchPoints();
+            await this.decryptCode();
+            this.purchased = true;
+        } else {
+            toastr.error('Purchase failed');
+        }
+    } catch (error) {
+        console.error('Error buying reward:', error);
     }
+    },
+    closeModal() {
+      $('#confirmModal').modal('hide');
+    }
+
 }
 };
 </script>
@@ -193,4 +206,18 @@ methods: {
         margin-right: 5px;
         margin-left: 5px;
     }
+
+
+    .reward-code-container {
+    text-align: center;
+    margin-top: 24px;
+    }
+
+    .reward-code {
+    font-size: 25px;
+    padding: 12px 22px;
+    border: 3px solid #3fe1e3;
+    border-radius: 8px;
+    }
+
 </style>

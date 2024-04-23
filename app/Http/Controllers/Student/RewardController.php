@@ -27,6 +27,19 @@ class RewardController extends Controller
         return response()->json(['points' => $points]);
     }
 
+    public function subtractPoints(Request $request)
+    {
+        $userId = $request->userId;
+        $pointsPrice = $request->points_price;
+
+        $point = PointModel::where('student_id', $userId)->firstOrFail();
+
+        $point->points -= $pointsPrice;
+        $point->save();
+    
+        return response()->json(['message' => 'Points subtracted successfully'], 200);
+    }
+
 
     public function decryptCode(Request $request)
     {
