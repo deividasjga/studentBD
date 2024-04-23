@@ -4,11 +4,6 @@
     <div class="row mb-2">
     <div class="col-sm-6">
     <h1 class="m-0">Rewards</h1>
-    <br>
-    <button @click="isNewReward = true; openRewardFormModal(null)" type="button" class="mb-2 btn btn-primary">
-        <i class="fa fa-plus-circle mr-1"></i>
-            Add New Reward
-    </button>
     </div>
     
     <div class="col-sm-6">
@@ -45,8 +40,7 @@
             <td>{{ rewardItem.valid_until }}</td>
             <td>{{ rewardItem.points_price }} points</td>
             <td>
-                <a href="#" @click.prevent="openRewardFormModal(rewardItem)"><i class="fa fa-edit"></i></a>
-                <a href="#" @click.prevent="deleteReward(rewardItem.id)" class="ml-2"><i class="fa fa-trash text-danger"></i></a>
+                <a href="#" @click.prevent="openConfirmRewardModal(rewardItem)"><i class="fa fa-shopping-cart"></i></a>
             </td>
         </tr>
         </tbody>
@@ -56,7 +50,6 @@
     </div>
     </div>
     </div>
-
 
 
 <div class="modal fade" id="editModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -120,7 +113,7 @@
     
 <script>
 import axios from 'axios';
-import { useToastr } from '../../../toastr.js';
+import { useToastr } from '../../toastr.js';
 
 const toastr = useToastr();
 
@@ -153,7 +146,7 @@ methods: {
     },
     async fetchRewards() {
     try {
-        const response = await axios.get('/api/admin/rewards');
+        const response = await axios.get('/api/student/rewards');
         if (Array.isArray(response.data) && response.data.length > 0) {
         this.rewards = response.data;
 
@@ -164,51 +157,6 @@ methods: {
         console.error('Error fetching rewards:', error);
     }
     },
-    openRewardFormModal(rewardItem) {
-        if (rewardItem) {
-        this.isNewReward = false;
-        this.editReward = { ...rewardItem };
-
-        this.givenCode = this.editReward.code;
-        this.decryptCode();
-
-        } else {
-        this.isNewReward = true;
-        this.editReward = { name: '' };
-        }
-        $('#editModal').modal('show');
-    },
-    async saveChanges() {
-    try {
-        if (this.isNewReward) {
-            const response = await axios.post('/api/admin/rewards', this.editReward);
-            console.log(this.editReward);
-            toastr.success('Reward created successfully.');
-        } else {
-            await axios.put(`/api/admin/rewards/${this.editReward.id}`, this.editReward);
-            toastr.success('Reward updated successfully.');
-        }
-        this.fetchRewards();
-        $('#editModal').modal('hide');
-    } catch (error) {
-        console.error('Error saving changes:', error);
-    }
-    },
-    deleteReward(id) {
-        if (confirm('Are you sure you want to delete this reward?')) {
-        axios.delete(`/api/admin/rewards/${id}`)
-        .then(() => {
-            this.rewards = this.rewards.filter(rewardItem => rewardItem.id !== id);
-            toastr.success('Reward deleted successfully.');
-        })
-        .catch(error => {
-            console.error('Error deleting reward:', error);
-        });
-        }
-    }
 }
 };
 </script>
-    
-
-

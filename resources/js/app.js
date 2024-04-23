@@ -19,6 +19,7 @@ import GradeList from './components/student/GradeList.vue';
 import ChallengeList from './components/admin/challenges/ChallengeList.vue';
 import StudentChallengeList from './components/student/StudentChallengeList.vue';
 import RewardList from './components/admin/rewards/RewardList.vue';
+import StudentRewardList from './components/student/StudentRewardList.vue';
 
 const app = createApp({});
 
@@ -40,6 +41,7 @@ app.component('test-component', Test)
     .component('student-grades-component', GradeList)
     .component('admin-challenge-component', ChallengeList)
     .component('student-challenges-component', StudentChallengeList)
-    .component('admin-reward-component', RewardList);
+    .component('admin-reward-component', RewardList)
+    .component('student-rewards-component', StudentRewardList);
 
 app.mount('#app');

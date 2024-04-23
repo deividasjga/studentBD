@@ -16,6 +16,7 @@ use App\Http\Controllers\Student\GradeController;
 use App\Http\Controllers\Admin\AdminChallengeController;
 use App\Http\Controllers\Student\ChallengeController;
 use App\Http\Controllers\Admin\AdminRewardController;
+use App\Http\Controllers\Student\RewardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -140,9 +141,15 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
     Route::get('/api/student/challenges/{studentId}', [ChallengeController::class, 'getMyChallenges']);
     Route::put('/api/student/challenges/{studentChallengeId}', [ChallengeController::class, 'updateStudentChallenge']);
 
+    Route::get('/api/student/rewards', [RewardController::class, 'index']);
+
     Route::get('/student/challenges', function () {
         return view('student.challenges.studentChallengeList');
     })->name('studentChallengeList');
+
+    Route::get('/student/rewards', function () {
+        return view('student.rewards.studentRewardList');
+    })->name('studentRewardList');
 });
 
 Route::middleware(['auth', 'user-role:teacher'])->group(function(){

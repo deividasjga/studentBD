@@ -272,6 +272,12 @@ Users
 <p>Challenges</p>
 </a>
 </li>
+<li class="nav-item">
+<a href="{{ route('studentRewardList') }}" class="nav-link {{ Request::is('student/rewards') ? 'active' : '' }}">
+<i class="nav-icon fas fa-gift"></i>
+<p>Rewards</p>
+</a>
+</li>
 
 @elseif(Auth::user()->role === 'parent')
 
