@@ -12,9 +12,4 @@ class RewardModel extends Model
     protected $table = 'reward';
     protected $fillable = ['name', 'description', 'points_price', 'code', 'valid_until'];
 
-    public function rewardPurchases()
-    {
-        return $this->hasMany(RewardPurchaseModel::class, 'reward_id');
-    }
-
 }

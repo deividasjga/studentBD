@@ -18,7 +18,10 @@ return new class extends Migration
             $table->integer('points_price');
             $table->string('code')->unique();
             $table->date('valid_until')->nullable();
+            $table->unsignedBigInteger('student_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -15,7 +15,7 @@ class RewardController extends Controller
 {
     public function index()
     {
-        $rewards= RewardModel::all();
+        $rewards = RewardModel::whereNull('student_id')->get();
 
         return response()->json($rewards);
     }
@@ -36,9 +36,15 @@ class RewardController extends Controller
 
         $point->points -= $pointsPrice;
         $point->save();
+
+        $rewardId = $request->reward_id;
+        $reward = RewardModel::findOrFail($rewardId);
+        $reward->student_id = $userId;
+        $reward->save();
     
         return response()->json(['message' => 'Points subtracted successfully'], 200);
     }
+
 
 
     public function decryptCode(Request $request)
@@ -50,6 +56,14 @@ class RewardController extends Controller
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             return response()->json(['error' => 'Decryption failed.'], 500);
         }
+    }
+
+
+    public function getRewardPurchaseHistory($userId)
+    {
+        $rewardPurchases = RewardModel::where('student_id', $userId)->get();
+
+        return response()->json($rewardPurchases);
     }
 
 }

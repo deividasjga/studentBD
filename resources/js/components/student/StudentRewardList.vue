@@ -15,12 +15,18 @@
     </div>
     </div>
     </div>
+    
 
     
     <div class="content">
     <div class="container-fluid">
         <div class="card">
         <div class="card-body">
+            
+            <button class="open-modal-btn btn btn-primary" @click="openRewardPurchaseModal">
+                <i class="fas fa-history"></i> View Purchase History
+            </button>
+
             <div class="points-container align-items-center mb-3">
                 <span class="mr-2" style="font-size: 18px;">My points:</span>
                 <span style="font-size: 18px;">{{ points }}</span>
@@ -93,6 +99,40 @@
   </div>
 </div>
 
+
+
+<div class="modal fade" id="purchaseHistoryModal" tabindex="-1" role="dialog" aria-labelledby="purchaseHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="purchaseHistoryModalLabel">Reward Purchase History</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li v-for="purchase in rewardPurchases" :key="purchase.id">
+                        <div class="purchase-item">
+                            <div>{{ purchase.name }}</div>
+                            <button class="view-button" @click="viewRewardCode(purchase)">View</button>
+                            <div v-if="purchase.showCode" class="reward-code-container">
+                                <h5>{{ purchase.name }} code:</h5>
+                                <div class="reward-code">{{ purchase.decryptedCode }}</div>
+                                <p style="margin-top: 10px">Valid until: {{ purchase.valid_until }}</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </template>
     
 <script>
@@ -121,7 +161,8 @@ data() {
     isNewReward: false,
     points: 0,
     rewardItem: null,
-    purchased: false
+    purchased: false,
+    rewardPurchases: [],
     };
 },
 created() {
@@ -173,7 +214,8 @@ methods: {
     try {
         const response = await axios.post('/api/student/points/subtract', {
             userId: this.userId,
-            points_price: this.rewardItem.points_price
+            points_price: this.rewardItem.points_price,
+            reward_id: this.rewardItem.id
         });
 
         if (response.status === 200) {
@@ -181,6 +223,11 @@ methods: {
             this.fetchPoints();
             await this.decryptCode();
             this.purchased = true;
+            const index = this.rewards.findIndex(reward => reward.id === this.rewardItem.id);
+            if (index !== -1) {
+                this.rewards.splice(index, 1);
+            }
+
         } else {
             toastr.error('Purchase failed');
         }
@@ -190,8 +237,32 @@ methods: {
     },
     closeModal() {
       $('#confirmModal').modal('hide');
-    }
+    },
 
+
+    async openRewardPurchaseModal() {
+      try {
+        const response = await axios.get(`/api/student/purchases/${this.userId}`);
+        this.rewardPurchases = response.data;
+        $('#purchaseHistoryModal').modal('show');
+        console.log(this.rewardPurchases);
+      } catch (error) {
+        console.error('Error fetching purchase history:', error);
+      }
+    },
+    async viewRewardCode(purchase) {
+        purchase.showCode = !purchase.showCode;
+        this.givenCode = purchase.code;
+        await this.decryptCodeInHistory(purchase);
+    },
+    async decryptCodeInHistory(purchase) {
+        try {
+            const response = await axios.post('/api/decrypt-code', { code: this.givenCode });
+            purchase.decryptedCode = response.data;
+        } catch (error) {
+            console.error('Error decrypting code:', error);
+        }
+    },
 }
 };
 </script>
@@ -220,4 +291,38 @@ methods: {
     border-radius: 8px;
     }
 
+    .open-modal-btn {
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 25px;
+    }
+
+    .purchase-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .view-button {
+    background-color: #1785fa;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .view-button:hover {
+    background-color: #1b6ec6;
+  }
+
+  .reward-code-container {
+    border: 1px solid #ccccccfa;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+
 </style>
+
