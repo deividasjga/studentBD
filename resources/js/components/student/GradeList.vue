@@ -121,20 +121,23 @@ methods: {
     getSubjectGrades(subjectId) {
         return this.studentGradesList.filter(grade => grade.subject_id === subjectId);
     },
+    
     calculateAverage(subjectId) {
         const grades = this.getSubjectGrades(subjectId).filter(grade => !isNaN(parseFloat(grade.grade)));
-        if (grades.length === 0) return 0;
+        if(grades.length === 0) return 0;
         const sum = grades.reduce((acc, grade) => acc + parseFloat(grade.grade), 0);
-        return sum / grades.length;
+        return (sum / grades.length).toFixed(2);
     },
+
     calculateTotalAverage() {
         const subjectIds = [...new Set(this.studentGradesList.map(grade => grade.subject_id))];
         const subjectAverage = subjectIds.map(subjectId => this.calculateAverage(subjectId));
         const filteredAverages = subjectAverage.filter(average => average !== 0);
         if(filteredAverages.length === 0) return 0;
-        const sum = filteredAverages.reduce((acc, average) => acc + average, 0);
-        return sum / filteredAverages.length;
-    },  
+        const sum = filteredAverages.reduce((acc, average) => acc + parseFloat(average), 0);
+        const totalAverage = sum / filteredAverages.length;
+        return isNaN(totalAverage) ? 0 : totalAverage.toFixed(2);
+    },
 }
 };
 </script>
