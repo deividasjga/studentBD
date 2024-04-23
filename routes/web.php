@@ -15,6 +15,7 @@ use App\Http\Controllers\Teacher\StudentGradesController;
 use App\Http\Controllers\Student\GradeController;
 use App\Http\Controllers\Admin\AdminChallengeController;
 use App\Http\Controllers\Student\ChallengeController;
+use App\Http\Controllers\Admin\AdminRewardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,6 +89,11 @@ Route::middleware(['auth', 'user-role:admin'])->group(function(){
 
     Route::post('/api/admin/assignChallengeToAllStudents', [AdminChallengeController::class, 'assignChallengeToAllStudents']);
 
+    Route::get('/api/admin/rewards', [AdminRewardController::class, 'index']);
+    Route::post('/api/admin/rewards', [AdminRewardController::class, 'store']);
+    Route::put('/api/admin/rewards/{id}', [AdminRewardController::class, 'update']);
+    Route::delete('/api/admin/rewards/{id}', [AdminRewardController::class, 'destroy']);
+
     Route::get('/StudentList', function () {
         return view('admin.students.StudentList');
     })->name('StudentList');
@@ -115,6 +121,10 @@ Route::middleware(['auth', 'user-role:admin'])->group(function(){
     Route::get('/admin/challenges', function () {
         return view('admin.challenges.challengeList');
     })->name('challengeList');
+
+    Route::get('/admin/rewards', function () {
+        return view('admin.rewards.rewardList');
+    })->name('rewardList');
 });
 
 Route::middleware(['auth', 'user-role:student'])->group(function(){

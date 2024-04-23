@@ -245,6 +245,13 @@ Users
 </a>
 </li>
 
+<li class="nav-item">
+<a href="{{ route('rewardList') }}" class="nav-link {{ Request::is('admin/rewards') ? 'active' : '' }}">
+<i class="nav-icon fas fa-gift"></i>
+<p>Rewards</p>
+</a>
+</li>
+
 @elseif(Auth::user()->role === 'teacher')
 <li class="nav-item">
 <a href="{{ route('teacherClassList') }}" class="nav-link {{ Request::is('teacher-classes') ? 'active' : '' }}">

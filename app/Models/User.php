@@ -84,4 +84,9 @@ class User extends Authenticatable
         return $this->hasMany(PointModel::class, 'student_id');
     }
 
+    public function rewardPurchases()
+    {
+        return $this->hasMany(RewardPurchaseModel::class, 'student_id');
+    }
+
 }
