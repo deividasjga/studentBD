@@ -142,6 +142,7 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
     Route::put('/api/student/challenges/{studentChallengeId}', [ChallengeController::class, 'updateStudentChallenge']);
 
     Route::get('/api/student/rewards', [RewardController::class, 'index']);
+    Route::get('/api/student/points/{userId}', [RewardController::class, 'getStudentPoints']);
 
     Route::get('/student/challenges', function () {
         return view('student.challenges.studentChallengeList');

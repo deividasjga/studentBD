@@ -15,12 +15,18 @@
     </div>
     </div>
     </div>
-    
+
     
     <div class="content">
     <div class="container-fluid">
         <div class="card">
         <div class="card-body">
+            <div class="points-container align-items-center mb-3">
+                <span class="mr-2" style="font-size: 18px;">My points:</span>
+                <span style="font-size: 18px;">{{ points }}</span>
+                <i class="far fa-gem" style="font-size: 18px;"></i> 
+            </div>
+
         <table class="table table-bordered" v-if="rewards.length > 0">
         <thead>
         <tr>
@@ -38,7 +44,7 @@
             <td>{{ rewardItem.name }}</td>
             <td>{{ rewardItem.description }}</td>
             <td>{{ rewardItem.valid_until }}</td>
-            <td>{{ rewardItem.points_price }} points</td>
+            <td>{{ rewardItem.points_price }} <i class="far fa-gem"></i></td>
             <td>
                 <a href="#" @click.prevent="openConfirmRewardModal(rewardItem)"><i class="fa fa-shopping-cart"></i></a>
             </td>
@@ -118,6 +124,12 @@ import { useToastr } from '../../toastr.js';
 const toastr = useToastr();
 
 export default {
+props: {
+    userId: {
+    type: Number,
+    required: true,
+    },
+},
 data() {
     return {
     rewards: { 
@@ -128,11 +140,13 @@ data() {
         valid_until: '',
     },
     editReward: { name: '' },
-    isNewReward: false
+    isNewReward: false,
+    points: 0
     };
 },
 created() {
     this.fetchRewards();
+    this.fetchPoints();
 },
 
 methods: {
@@ -157,6 +171,26 @@ methods: {
         console.error('Error fetching rewards:', error);
     }
     },
+    async fetchPoints() {
+    try {
+        const response = await axios.get(`/api/student/points/${this.userId}`);
+        this.points = response.data.points;
+    } catch (error) {
+        console.error('Error fetching points:', error);
+    }
+    }
 }
 };
 </script>
+
+<style>
+    .points-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .points-container span {
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+</style>

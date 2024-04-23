@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Models\ChallengeModel;
 use App\Models\StudentChallengeModel;
 use App\Models\RewardModel;
+use App\Models\PointModel;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,6 +18,13 @@ class RewardController extends Controller
         $rewards= RewardModel::all();
 
         return response()->json($rewards);
+    }
+
+    public function getStudentPoints($userId)
+    {
+        $points = PointModel::where('student_id', $userId)->sum('points');
+
+        return response()->json(['points' => $points]);
     }
 
 
