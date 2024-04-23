@@ -101,7 +101,7 @@
                 <label for="rewardValidUntil" class="form-label">Valid until</label>
                 <input type="date" v-model="editReward.valid_until" class="form-control" id="rewardValidUntil">
             </div>
-        </div>    
+        </div>  
 </div>
 
 
@@ -141,6 +141,14 @@ created() {
 },
 
 methods: {
+    async decryptCode() {
+        try {
+            const response = await axios.post('/api/decrypt-code', { code: this.givenCode });
+            this.editReward.code = response.data;
+        } catch (error) {
+            console.error('Error decrypting code:', error);
+        }
+    },
     async fetchRewards() {
     try {
         const response = await axios.get('/api/admin/rewards');
@@ -158,6 +166,10 @@ methods: {
         if (rewardItem) {
         this.isNewReward = false;
         this.editReward = { ...rewardItem };
+
+        this.givenCode = this.editReward.code;
+        this.decryptCode();
+
         } else {
         this.isNewReward = true;
         this.editReward = { name: '' };

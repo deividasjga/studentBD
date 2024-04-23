@@ -17,5 +17,4 @@ class RewardModel extends Model
         return $this->hasMany(RewardPurchaseModel::class, 'reward_id');
     }
 
-
 }
