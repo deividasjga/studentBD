@@ -128,11 +128,13 @@ methods: {
         return sum / grades.length;
     },
     calculateTotalAverage() {
-        const allGrades = this.studentGradesList.filter(grade => !isNaN(parseFloat(grade.grade)));
-        if (allGrades.length === 0) return 0;
-        const sum = allGrades.reduce((acc, grade) => acc + parseFloat(grade.grade), 0);
-        return sum / allGrades.length;
-    }
+        const subjectIds = [...new Set(this.studentGradesList.map(grade => grade.subject_id))];
+        const subjectAverage = subjectIds.map(subjectId => this.calculateAverage(subjectId));
+        const filteredAverages = subjectAverage.filter(average => average !== 0);
+        if(filteredAverages.length === 0) return 0;
+        const sum = filteredAverages.reduce((acc, average) => acc + average, 0);
+        return sum / filteredAverages.length;
+    },  
 }
 };
 </script>
