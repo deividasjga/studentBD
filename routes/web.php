@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AdminChallengeController;
 use App\Http\Controllers\Student\ChallengeController;
 use App\Http\Controllers\Admin\AdminRewardController;
 use App\Http\Controllers\Student\RewardController;
+use App\Http\Controllers\Student\LeaderboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -145,9 +146,9 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
     Route::get('/api/student/points/{userId}', [RewardController::class, 'getStudentPoints']);
     Route::post('/api/student/points/subtract', [RewardController::class, 'subtractPoints']);
     Route::post('/api/decrypt-code', [RewardController::class, 'decryptCode']);
-    
-
     Route::get('/api/student/purchases/{userId}', [RewardController::class, 'getRewardPurchaseHistory']);
+
+    Route::get('/api/student/leaderboardStudents', [LeaderboardController::class, 'getStudents']);
 
     Route::get('/student/challenges', function () {
         return view('student.challenges.studentChallengeList');
@@ -156,6 +157,10 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
     Route::get('/student/rewards', function () {
         return view('student.rewards.studentRewardList');
     })->name('studentRewardList');
+
+    Route::get('/student/leaderboard', function () {
+        return view('student.leaderboard.studentLeaderboardList');
+    })->name('studentLeaderboardList');
 });
 
 Route::middleware(['auth', 'user-role:teacher'])->group(function(){

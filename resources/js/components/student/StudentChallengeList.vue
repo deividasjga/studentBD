@@ -14,35 +14,35 @@
         </div>
       </div>
     </div>
-    <div class="content">
-      <div class="container-fluid">
-        <div class="card">
-          <div class="card-body">
-            <div>
-              <h2>My Challenges</h2>
-              <ul>
-                <li v-for="challenge in challenges" :key="challenge.id">
-                  {{ challenge.name }} - {{ challenge.description }}
-                  type: ({{ challenge.challenge_type }})
-                  - {{ getChallengeTypeDescription(challenge.challenge_type) }}
-                  - Reward points: {{ challenge.reward_points }}
-                  <ul>
-                    <li v-for="studentChallenge in challenge.student_challenges" :key="studentChallenge.id">
-                      Progress: {{ studentChallenge.progress }}
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+
+
+    <div>
+    <ul class="list-group">
+        <li v-for="challenge in challenges" :key="challenge.id" class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h3><i class="fas fa-star"></i> {{ challenge.name }}</h3>
+                    <p>{{ challenge.description }}</p>
+                    <p><strong>Start Date:</strong> {{ formatDate(challenge.start_date) }}</p>
+                    <p><strong>End Date:</strong> {{ formatDate(challenge.end_date) }}</p>
+                </div>
+                <div>
+                    <span class="badge bg-primary mx-1 p-2" style="font-size: 1rem;">{{ challenge.reward_points }} <i class="far fa-gem"></i></span>
+                    <span v-if="challenge.student_challenges.some(sc => sc.completed)" class="badge bg-success mx-1 p-2" style="font-size: 1rem;">Completed</span>
+                    <span v-else class="badge bg-secondary mx-1 p-2" style="font-size: 1rem;">Time left: {{ daysLeft(challenge.end_date) }}</span>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        </li>
+    </ul>
+</div>
+
+
+
   </template>
   
   <script>
   import axios from "axios";
-  import { formatDateDash } from '../../helper.js';
+  import { formatDate, formatDateDash } from '../../helper.js';
   
   export default {
     props: {
@@ -126,7 +126,7 @@
             );
             const sum = grades.reduce((total, grade) => total + parseInt(grade.grade),0);
             const average = sum/grades.length;
-            return average > challenge.minimum_grade;
+            return average >= challenge.minimum_grade;
         }
         if (challenge.challenge_type === 2) {
             const requiredCount = challenge.grade_count;
@@ -157,7 +157,6 @@
         return false;
     },
     async makeChallengeCompleted(challenge) {
-        console.log('woww');
         const studentChallenge = challenge.student_challenges.find(
             (sc) => sc.student_id === this.userId
         );
@@ -166,6 +165,22 @@
             await axios.put(`/api/student/challenges/${studentChallenge.id}`, studentChallenge);
         }
       },
+      daysLeft(endDate) {
+        const today = new Date();
+        const endDay = new Date(endDate);
+        const diffTime = endDay - today;
+        const diffDays = Math.ceil(diffTime / (1000*60*60*24));
+        if (diffDays <= 0) {
+          return "0 days";
+        } else if (diffDays === 1) {
+          return diffDays + " day";
+        } else {
+          return diffDays + " days";
+        }
+      },
+      formatDate(date) {
+            return formatDate(date);
+      }
     },
   };
   </script>

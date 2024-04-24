@@ -278,6 +278,12 @@ Users
 <p>Rewards</p>
 </a>
 </li>
+<li class="nav-item">
+<a href="{{ route('studentLeaderboardList') }}" class="nav-link {{ Request::is('student/leaderboard') ? 'active' : '' }}">
+<i class="nav-icon fas fa-trophy"></i>
+<p>Leaderboard</p>
+</a>
+</li>
 
 @elseif(Auth::user()->role === 'parent')
 

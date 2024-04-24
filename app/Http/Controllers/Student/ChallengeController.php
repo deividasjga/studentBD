@@ -12,6 +12,7 @@ use App\Models\SubjectModel;
 use App\Models\GradeModel;
 use App\Models\PointModel;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
 
 class ChallengeController extends Controller
 {
@@ -29,8 +30,8 @@ class ChallengeController extends Controller
             $query->where('student_id', $user->id);
         })->with(['studentChallenges' => function ($query) use ($user) {
             $query->where('student_id', $user->id);
-        }])->get();
-        
+        }])->whereDate('end_date', '>=', Carbon::today())->get();
+    
         return response()->json($challenges);
     }
 
