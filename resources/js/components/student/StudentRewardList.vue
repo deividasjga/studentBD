@@ -138,6 +138,7 @@
 <script>
 import axios from 'axios';
 import { useToastr } from '../../toastr.js';
+import { isChallengeCompleted, makeChallengeCompleted } from './challengeHelper';
 
 const toastr = useToastr();
 
@@ -163,9 +164,23 @@ data() {
     rewardItem: null,
     purchased: false,
     rewardPurchases: [],
+
+
+    student: {},
+        challenges: [],
+        selectedType: null,
+        challengeTypes: [
+          { value: 1, description: "Grade average" },
+          { value: 2, description: "Grade count" },
+          { value: 3, description: "Attendance" },
+        ],
     };
 },
 created() {
+    this.fetchStudent();
+    this.fetchChallenges();
+    this.checkAndUpdateCompletedChallenges();
+
     this.fetchRewards();
     this.fetchPoints();
 },
@@ -173,7 +188,7 @@ created() {
 methods: {
     async decryptCode() {
         try {
-            const response = await axios.post('/api/decrypt-code', { code: this.givenCode });
+            const response = await axios.post('/api/admin/decrypt-code', { code: this.givenCode });
             this.rewardItem.code = response.data;
         } catch (error) {
             console.error('Error decrypting code:', error);
@@ -262,6 +277,57 @@ methods: {
         } catch (error) {
             console.error('Error decrypting code:', error);
         }
+    },
+
+    
+    async fetchStudent() {
+        try {
+          const response = await axios.get(`/api/getStudent/${this.userId}`);
+          this.student = response.data;
+          await this.fetchStudentGrades(this.userId);
+        } catch (error) {
+          console.error("Error fetching Student:", error);
+        }
+      },
+      async fetchStudentGrades(userId) {
+        try {
+            const studentId = userId;
+            const response = await axios.get(`/api/getStudentGrades/${studentId}`);
+            this.student.studentGrades = response.data;
+        } catch (error) {
+            console.error("Error fetching Student grades:", error);
+        }
+        },
+      async fetchChallenges() {
+        try {
+          const response = await axios.get(
+            `/api/student/challenges/${this.userId}`
+          );
+          this.challenges = response.data;
+        } catch (error) {
+          console.error("Error fetching Challenges:", error);
+        }
+      },
+      getChallengeTypeDescription(type) {
+        const foundType = this.challengeTypes.find(
+          (item) => item.value === type
+        );
+        return foundType ? foundType.description : "Unknown";
+      },
+
+
+    async checkAndUpdateCompletedChallenges() {
+      try {
+        const response = await axios.get(`/api/student/challenges/${this.userId}`);
+        const challenges = response.data;
+        for (const challenge of challenges) {
+          if (isChallengeCompleted(this.student, challenge)) {
+            await makeChallengeCompleted(this.student, challenge);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking completed challenges:", error);
+      }
     },
 }
 };

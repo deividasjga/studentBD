@@ -145,7 +145,7 @@ created() {
 methods: {
     async decryptCode() {
         try {
-            const response = await axios.post('/api/decrypt-code', { code: this.givenCode });
+            const response = await axios.post('/api/admin/decrypt-code', { code: this.givenCode });
             this.editReward.code = response.data;
         } catch (error) {
             console.error('Error decrypting code:', error);
@@ -164,19 +164,23 @@ methods: {
         console.error('Error fetching rewards:', error);
     }
     },
-    openRewardFormModal(rewardItem) {
+    async openRewardFormModal(rewardItem) {
+    try {
         if (rewardItem) {
-        this.isNewReward = false;
-        this.editReward = { ...rewardItem };
+            this.isNewReward = false;
+            this.editReward = { ...rewardItem };
 
-        this.givenCode = this.editReward.code;
-        this.decryptCode();
+            this.givenCode = this.editReward.code;
+            await this.decryptCode();
 
         } else {
-        this.isNewReward = true;
-        this.editReward = { name: '' };
+            this.isNewReward = true;
+            this.editReward = { name: '' };
         }
         $('#editModal').modal('show');
+    } catch (error) {
+        console.error('Error opening reward form modal:', error);
+    }
     },
     async saveChanges() {
     try {

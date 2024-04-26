@@ -96,7 +96,7 @@ Route::middleware(['auth', 'user-role:admin'])->group(function(){
     Route::put('/api/admin/rewards/{id}', [AdminRewardController::class, 'update']);
     Route::delete('/api/admin/rewards/{id}', [AdminRewardController::class, 'destroy']);
 
-    Route::post('/api/decrypt-code', [AdminRewardController::class, 'decryptCode']);
+    Route::post('/api/admin/decrypt-code', [AdminRewardController::class, 'decryptCode']);
 
     Route::get('/StudentList', function () {
         return view('admin.students.StudentList');
