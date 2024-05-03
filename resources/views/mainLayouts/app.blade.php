@@ -259,6 +259,12 @@ Users
 <p>My classes</p>
 </a>
 </li>
+<li class="nav-item">
+<a href="{{ route('teacherLeaderboardList') }}" class="nav-link {{ Request::is('teacher/leaderboard') ? 'active' : '' }}">
+<i class="nav-icon fas fa-trophy"></i>
+<p>Leaderboard</p>
+</a>
+</li>
 @elseif(Auth::user()->role === 'student')
 <li class="nav-item">
 <a href="{{ route('studentGrades') }}" class="nav-link {{ Request::is('student/grades') ? 'active' : '' }}">

@@ -165,12 +165,20 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
 
 Route::middleware(['auth', 'user-role:teacher'])->group(function(){
     Route::get('/api/teacher/{teacher_id}/classes', [TeacherClassController::class, 'getTeacherClasses']);
+    Route::get('/api/teacher/{teacher_id}/classList', [TeacherClassController::class, 'getTeacherClassesJson']);
     Route::get('/teacher-classes/{user_id}/{class_id}/{subject_id}', [TeacherClassController::class, 'subjectGradeList'])
         ->name('subjectGrading');
     Route::get('/teacher-classes', [TeacherClassController::class, 'getTeacherClasses'])->name('teacherClassList');
     Route::get('/api/teacher-classes/{class_id}/{subject_id}/students', [StudentGradesController::class, 'getStudents']);
     Route::get('/api/teacher-classes/{class_id}/{subject_id}/studentsGrades', [StudentGradesController::class, 'getStudentsGrades']);
     Route::post('/api/save-grades',  [StudentGradesController::class, 'saveGrades']);
+
+    Route::get('/api/teacher/{selectedClass}/classLeaderboard', [TeacherClassController::class, 'getClassLeaderboard']);
+
+
+    Route::get('/teacher/leaderboard', function () {
+        return view('teacher.leaderboard.teacherLeaderboardList');
+    })->name('teacherLeaderboardList');
 });
 
 Route::middleware(['auth', 'user-role:parent'])->group(function(){
