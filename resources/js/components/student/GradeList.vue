@@ -25,35 +25,37 @@
                 <table class="table table-sm">
                 <thead class="thead-dark">
                     <tr>
-                    <th scope="col" style="width: 35px">#</th>
-                    <th scope="col">Subject Name</th>
-                    <th scope="col">Grades</th>
-                    <th scope="col">Average Grade</th>
+                    <th scope="col" style="width: 35px; text-align: center;">#</th>
+                    <th scope="col" style="text-align: center;">Subject Name</th>
+                    <th scope="col" style="text-align: center;">Grades</th>
+                    <th scope="col" style="width: 250px; text-align: center;">Average Grade</th>
                     </tr>
                 </thead>
+
                 <tbody class="table-bordered">
                     <tr v-for="(subject, index) in classOne.subjects" :key="subject.id">
                     <td>{{ index + 1 }}</td>
                     <td :title="'Subject: ' + subject.name">{{ subject.name }}</td>
                     <td>
-                        <ul v-if="getSubjectGrades(subject.id).length > 0">
+                        <ul v-if="getSubjectGrades(subject.id).length > 0" class="gradesList">
                         <li v-for="grade in getSubjectGrades(subject.id)" :key="grade.id"
-                                                     :title="'Grade: ' + grade.grade +'\nDate: ' + grade.grade_date"
-                                                     :class="{ 'text-danger': isNaN(parseFloat(grade.grade)) }">
+                            :class="['grade', { 'red-text': grade.grade === 'n' }]"
+                            :title="'Grade: ' + grade.grade + '\nDate: ' + grade.grade_date">
                             {{ grade.grade }}
                         </li>
                         </ul>
                         <p v-else>No grades available</p>
                     </td>
-                    <td style="font-weight: bold;">{{ calculateAverage(subject.id) }}</td>
+                    <td class="averageGrade">{{ calculateAverage(subject.id) }}</td>
                     </tr>
                 </tbody>
+
                 <tfoot>
-          <tr>
-            <td colspan="3" class="text-right"><b style="font-size: 1.1rem;">Total Average:</b></td>
-            <td style="font-weight: bold;">{{ calculateTotalAverage() }}</td>
-          </tr>
-        </tfoot>
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="3" style="text-align: center;"><b style="font-size: 1.1rem;">Total Average Grade: {{ calculateTotalAverage() }}</b></td>
+                </tr>
+                </tfoot>
                 </table>
             </div>
             </div>
@@ -109,7 +111,6 @@ methods: {
         const response = await axios.get(`/api/getStudentGrades/${this.userId}`);
         if (response.data && Array.isArray(response.data)) {
         this.studentGradesList = response.data;
-        console.log('Student grades:', this.studentGradesList);
         } else {
         this.studentGradesList = [];
         console.log('No grades available');
@@ -119,7 +120,8 @@ methods: {
     }
     },
     getSubjectGrades(subjectId) {
-        return this.studentGradesList.filter(grade => grade.subject_id === subjectId);
+        return this.studentGradesList.filter(grade => grade.subject_id === subjectId)
+            .sort((a, b) => new Date(a.grade_date) - new Date(b.grade_date));
     },
     
     calculateAverage(subjectId) {
@@ -142,3 +144,28 @@ methods: {
 };
 </script>
   
+<style scoped>
+  .gradesList {
+    padding: 0;
+    margin: 0;
+  }
+  .gradesList li {
+    display: inline-block;
+    margin-right: 5px;
+    padding: 5px 7px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  .grade {
+    font-weight: bold;
+  }
+  .averageGrade {
+    background-color: #f0f0f0;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .red-text {
+    color: red;
+}
+</style>
