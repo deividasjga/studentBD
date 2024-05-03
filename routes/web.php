@@ -145,10 +145,10 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
     Route::get('/api/student/rewards', [RewardController::class, 'index']);
     Route::get('/api/student/points/{userId}', [RewardController::class, 'getStudentPoints']);
     Route::post('/api/student/points/subtract', [RewardController::class, 'subtractPoints']);
-    Route::post('/api/decrypt-code', [RewardController::class, 'decryptCode']);
+    Route::post('/api/student/decrypt-code', [RewardController::class, 'decryptCode']);
     Route::get('/api/student/purchases/{userId}', [RewardController::class, 'getRewardPurchaseHistory']);
 
-    Route::get('/api/student/leaderboardStudents', [LeaderboardController::class, 'getStudents']);
+    Route::get('/api/student/leaderboardStudents/{userId}', [LeaderboardController::class, 'getStudents']);
 
     Route::get('/student/challenges', function () {
         return view('student.challenges.studentChallengeList');

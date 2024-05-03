@@ -188,7 +188,7 @@ created() {
 methods: {
     async decryptCode() {
         try {
-            const response = await axios.post('/api/admin/decrypt-code', { code: this.givenCode });
+            const response = await axios.post('/api/student/decrypt-code', { code: this.givenCode });
             this.rewardItem.code = response.data;
         } catch (error) {
             console.error('Error decrypting code:', error);
@@ -272,7 +272,7 @@ methods: {
     },
     async decryptCodeInHistory(purchase) {
         try {
-            const response = await axios.post('/api/decrypt-code', { code: this.givenCode });
+            const response = await axios.post('/api/student/decrypt-code', { code: this.givenCode });
             purchase.decryptedCode = response.data;
         } catch (error) {
             console.error('Error decrypting code:', error);
