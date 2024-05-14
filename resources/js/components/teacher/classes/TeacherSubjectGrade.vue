@@ -6,14 +6,14 @@
           <thead>
             <tr>
               <th class="student-info">Student</th>
-              <th v-for="date in dates" :key="date">{{ date }}</th>
+              <th v-for="date in dates" :key="date" class="date-cell">{{ formatGradeDate(date) }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(student, index) in students" :key="student.id">
               <td class="student-info">{{ index + 1 }}. {{ student.first_name }} {{ student.last_name }}</td>
               <td v-for="date in dates" :key="date">
-                <input type="text" v-model="studentGrades[index][date]" placeholder="Grade">
+                <input type="text" v-model="studentGrades[index][date]" placeholder="-">
               </td>
             </tr>
           </tbody>
@@ -29,8 +29,10 @@
   </div>
 </template>
 
+
 <script>
 import { useToastr } from '../../../toastr.js';
+import { formatGradeDate } from '../../../helper.js';
 const toastr = useToastr();
 
 export default {
@@ -139,6 +141,9 @@ export default {
       } catch (error) {
         toastr.error('Failed to save grades.');
       }
+    },
+    formatGradeDate(date) {
+      return formatGradeDate(date);
     }
 
   }
@@ -187,8 +192,14 @@ thead th {
   text-align: left;
 }
 
+.date-cell {
+  font-size: 12px;
+  width: 30px;
+}
+
 input[type="text"] {
-  width: 50px;
+  width: 40px;
+  font-size: 15px;
 }
 
 

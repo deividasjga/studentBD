@@ -23,6 +23,9 @@ import StudentRewardList from './components/student/StudentRewardList.vue';
 import StudentLeaderboardList from './components/student/StudentLeaderboardList.vue';
 import TeacherLeaderboardList from './components/teacher/leaderboard/TeacherLeaderboardList.vue';
 import TeacherHomework from './components/teacher/homework/TeacherHomework.vue';
+import ParentGrades from './components/parent/ParentGrades.vue';
+import ParentHomework from './components/parent/ParentHomework.vue';
+import ParentLeaderboard from './components/parent/ParentLeaderboard.vue';
 
 const app = createApp({});
 
@@ -48,6 +51,9 @@ app.component('test-component', Test)
     .component('student-rewards-component', StudentRewardList)
     .component('student-leaderboard-component', StudentLeaderboardList)
     .component('teacher-leaderboard-component', TeacherLeaderboardList)
-    .component('teacher-homework-component', TeacherHomework);
+    .component('teacher-homework-component', TeacherHomework)
+    .component('parent-grades-component', ParentGrades)
+    .component('parent-homework-component', ParentHomework)
+    .component('parent-leaderboard-component', ParentLeaderboard);
 
 app.mount('#app');

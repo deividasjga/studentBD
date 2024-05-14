@@ -1,8 +1,8 @@
 <template>
 
 <div>
-  <h2>Teacher Classes</h2>
-  <label for="classSelect">Select a class:</label>
+  <h2 style="margin-left: 10px;">Teacher Classes</h2>
+  <label for="classSelect" style="margin-left: 30px;">Select a class:</label>
   <select id="classSelect" v-model="selectedClass" @change="fetchClassLeaderboard">
       <option v-for="classItem in teacherClasses" :value="classItem.id" :key="classItem.id">
           {{ classItem.name }}
@@ -11,7 +11,8 @@
 
 
   <div>
-  <h2>Class Leaderboard</h2>
+  <br>
+  <h2 style="margin-left: 10px;">Class Leaderboard</h2>
   <table v-if="students.length > 0" class="table leaderboard-table">
     <thead>
       <tr>
@@ -28,7 +29,7 @@
       </tr>
     </tbody>
   </table>
-  <p v-else>No students in this class.</p>
+  <p v-else style="margin-left: 30px;">No students in this class.</p>
 </div>
 
 

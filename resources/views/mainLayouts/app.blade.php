@@ -305,9 +305,21 @@ Users
 
 @elseif(Auth::user()->role === 'parent')
 <li class="nav-item">
-<a href="" class="nav-link">
+<a href="{{ route('parentGrades') }}" class="nav-link {{ Request::is('parent/grades') ? 'active' : '' }}">
+<i class="nav-icon fas fa-book"></i>
+<p>Grades</p>
+</a>
+</li>
+<li class="nav-item">
+<a href="{{ route('parentHomework') }}" class="nav-link {{ Request::is('parent/homework') ? 'active' : '' }}">
 <i class="nav-icon fas fa-tasks"></i>
 <p>Homework</p>
+</a>
+</li>
+<li class="nav-item">
+<a href="{{ route('parentLeaderboard') }}" class="nav-link {{ Request::is('parent/leaderboard') ? 'active' : '' }}">
+<i class="nav-icon fas fa-trophy"></i>
+<p>Leaderboard</p>
 </a>
 </li>
 @endif

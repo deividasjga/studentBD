@@ -18,6 +18,8 @@ use App\Http\Controllers\Student\ChallengeController;
 use App\Http\Controllers\Admin\AdminRewardController;
 use App\Http\Controllers\Student\RewardController;
 use App\Http\Controllers\Student\LeaderboardController;
+use App\Http\Controllers\Parent\ParentGradeController;
+use App\Http\Controllers\Parent\ParentLeaderboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +31,6 @@ use App\Http\Controllers\Student\LeaderboardController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -186,7 +187,24 @@ Route::middleware(['auth', 'user-role:teacher'])->group(function(){
 });
 
 Route::middleware(['auth', 'user-role:parent'])->group(function(){
-    
+    Route::get('/api/getParentStudents/{userId}', [ParentGradeController::class, 'getParentStudents']);
+    Route::get('/api/getSelectedStudent/{userId}', [ParentGradeController::class, 'getSelectedStudent']);
+    Route::get('/api/getSelectedClass/{classId}', [ParentGradeController::class, 'getSelectedClass']);
+    Route::get('/api/getSelectedStudentGrades/{studentId}', [ParentGradeController::class, 'getSelectedStudentGrades']);
+    Route::get('/api/parent/leaderboardStudents/{userId}', [ParentLeaderboardController::class, 'getLeaderboardStudents']);
+
+
+    Route::get('/parent/grades', function () {
+        return view('parent.grades.studentGrades');
+    })->name('parentGrades');
+
+    Route::get('/parent/homework', function () {
+        return view('parent.homework.studentHomework');
+    })->name('parentHomework');
+
+    Route::get('/parent/leaderboard', function () {
+        return view('parent.leaderboard.studentLeaderboardList');
+    })->name('parentLeaderboard');
 });
 
 

@@ -84,4 +84,23 @@ class User extends Authenticatable
         return $this->hasMany(PointModel::class, 'student_id');
     }
 
+    public function parentOf()
+    {
+        return $this->hasMany(ParentStudentModel::class, 'parent_student', 'parent_id');
+    }
+
+    public function childOf()
+    {
+        return $this->hasMany(ParentStudentModel::class, 'parent_student', 'student_id');
+    }
+    // public function students()
+    // {
+    //     return $this->belongsToMany(User::class, 'parent_student', 'parent_id', 'student_id');
+    // }
+
+    // public function parents()
+    // {
+    //     return $this->belongsToMany(User::class, 'parent_student', 'student_id', 'parent_id');
+    // }
+
 }
