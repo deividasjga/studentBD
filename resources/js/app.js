@@ -22,6 +22,7 @@ import RewardList from './components/admin/rewards/RewardList.vue';
 import StudentRewardList from './components/student/StudentRewardList.vue';
 import StudentLeaderboardList from './components/student/StudentLeaderboardList.vue';
 import TeacherLeaderboardList from './components/teacher/leaderboard/TeacherLeaderboardList.vue';
+import TeacherHomework from './components/teacher/homework/TeacherHomework.vue';
 
 const app = createApp({});
 
@@ -46,6 +47,7 @@ app.component('test-component', Test)
     .component('admin-reward-component', RewardList)
     .component('student-rewards-component', StudentRewardList)
     .component('student-leaderboard-component', StudentLeaderboardList)
-    .component('teacher-leaderboard-component', TeacherLeaderboardList);
+    .component('teacher-leaderboard-component', TeacherLeaderboardList)
+    .component('teacher-homework-component', TeacherHomework);
 
 app.mount('#app');

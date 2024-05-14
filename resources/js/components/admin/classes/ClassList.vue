@@ -159,7 +159,8 @@ export default {
         this.fetchClasses();
         $('#editModal').modal('hide');
     } catch (error) {
-        console.error('Error saving changes:', error);
+        // console.error('Error saving changes:', error);
+        toastr.error('Class name cannot be empty.');
     }
     },
     deleteClass(id) {

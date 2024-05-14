@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h2>Class Leaderboard</h2>
+      <h2 style="margin-left: 10px;">Class Leaderboard</h2>
       <table class="table leaderboard-table">
         <thead>
           <tr>

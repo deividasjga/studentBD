@@ -41,7 +41,7 @@ const createUserSchema = yup.object({
 
 
 const editUserSchema = yup.object({
-    first_name: yup.string().required(),
+    first_name: yup.string().required().max(255),
     email: yup.string().email().required(),
     password: yup.string().notRequired().test('password', 'Passwords must be be minimum of 8 characters', function(value) {
                 if (!!value) {

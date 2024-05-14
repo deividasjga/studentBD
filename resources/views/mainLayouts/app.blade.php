@@ -166,7 +166,7 @@ Nora Silvester
 </div>
 </div>
 
-<div class="form-inline">
+<!-- <div class="form-inline">
 <div class="input-group" data-widget="sidebar-search">
 <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
 <div class="input-group-append">
@@ -175,7 +175,7 @@ Nora Silvester
 </button>
 </div>
 </div>
-</div>
+</div> -->
 
 <nav class="mt-2">
 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -260,6 +260,12 @@ Users
 </a>
 </li>
 <li class="nav-item">
+<a href="{{ route('teacherHomework') }}" class="nav-link {{ Request::is('teacher/homework') ? 'active' : '' }}">
+<i class="nav-icon fas fa-tasks"></i>
+<p>Homework</p>
+</a>
+</li>
+<li class="nav-item">
 <a href="{{ route('teacherLeaderboardList') }}" class="nav-link {{ Request::is('teacher/leaderboard') ? 'active' : '' }}">
 <i class="nav-icon fas fa-trophy"></i>
 <p>Leaderboard</p>
@@ -270,6 +276,12 @@ Users
 <a href="{{ route('studentGrades') }}" class="nav-link {{ Request::is('student/grades') ? 'active' : '' }}">
 <i class="nav-icon fas fa-book"></i>
 <p>My grades</p>
+</a>
+</li>
+<li class="nav-item">
+<a href="" class="nav-link">
+<i class="nav-icon fas fa-tasks"></i>
+<p>Homework</p>
 </a>
 </li>
 <li class="nav-item">
@@ -292,7 +304,12 @@ Users
 </li>
 
 @elseif(Auth::user()->role === 'parent')
-
+<li class="nav-item">
+<a href="" class="nav-link">
+<i class="nav-icon fas fa-tasks"></i>
+<p>Homework</p>
+</a>
+</li>
 @endif
 @endauth
 </li>

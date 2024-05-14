@@ -179,6 +179,10 @@ Route::middleware(['auth', 'user-role:teacher'])->group(function(){
     Route::get('/teacher/leaderboard', function () {
         return view('teacher.leaderboard.teacherLeaderboardList');
     })->name('teacherLeaderboardList');
+
+    Route::get('/teacher/homework', function () {
+        return view('teacher.homework.homeworkList');
+    })->name('teacherHomework');
 });
 
 Route::middleware(['auth', 'user-role:parent'])->group(function(){

@@ -36,20 +36,20 @@
         <table class="table table-bordered" v-if="rewards.length > 0">
         <thead>
         <tr>
-            <th>ID</th>
+            <!-- <th>ID</th> -->
             <th>Name</th>
             <th>Description</th>
-            <th>Valid until</th>
+            <!-- <th>Valid until</th> -->
             <th>Price</th>
             <th>Action</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="rewardItem in rewards" :key="rewardItem.id">
-            <td>{{ rewardItem.id }}</td>
+            <!-- <td>{{ rewardItem.id }}</td> -->
             <td>{{ rewardItem.name }}</td>
             <td>{{ rewardItem.description }}</td>
-            <td>{{ rewardItem.valid_until }}</td>
+            <!-- <td>{{ rewardItem.valid_until }}</td> -->
             <td>{{ rewardItem.points_price }} <i class="far fa-gem"></i></td>
             <td>
                 <a href="#" @click.prevent="openConfirmRewardModal(rewardItem)"><i class="fa fa-shopping-cart"></i></a>
