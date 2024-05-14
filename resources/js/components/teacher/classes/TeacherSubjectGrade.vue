@@ -6,16 +6,12 @@
           <thead>
             <tr>
               <th class="student-info">Student</th>
-              <th class="action-info">Action</th>
               <th v-for="date in dates" :key="date">{{ date }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(student, index) in students" :key="student.id">
               <td class="student-info">{{ index + 1 }}. {{ student.first_name }} {{ student.last_name }}</td>
-              <td class="action-info">
-                <a href="#" @click.prevent="saveGrades(index)"><i class="fas fa-save"></i> Save</a>
-              </td>
               <td v-for="date in dates" :key="date">
                 <input type="text" v-model="studentGrades[index][date]" placeholder="Grade">
               </td>
@@ -24,6 +20,12 @@
         </table>
       </div>
     </div>
+  </div>
+  <br>
+  <div style="display: flex; justify-content: flex-end; margin-right: 80px;">
+    <a href="#" @click.prevent="saveGrades(index)" class="save-button">
+      <span>Save </span><i class="fas fa-save"></i>
+    </a>
   </div>
 </template>
 
@@ -106,37 +108,38 @@ export default {
         console.error('Error fetching students grades:', error);
       }
     },
-    async saveGrades(studentIndex) {
-    try {
-      const student = this.students[studentIndex];
-      const grades = this.studentGrades[studentIndex];
-      const gradeData = [];
+    async saveGrades() {
+      try {
+        const gradeData = [];
 
-      for (const date in grades) {
-        if (grades.hasOwnProperty(date) && date !== 'id' && date !== 'grades') {
-          const gradeArray = grades[date].split(',').map(g => g.trim());
-          for (const grade of gradeArray) {
-            if (grade) {
-              gradeData.push({
-                teacher_id: this.user_id,
-                student_id: student.id,
-                class_id: this.class_id,
-                subject_id: this.subject_id,
-                grade_date: date,
-                grade: grade
-              });
+        for (let i = 0; i < this.students.length; i++) {
+          const student = this.students[i];
+          const grades = this.studentGrades[i];
+
+          for (const date in grades) {
+            if (grades.hasOwnProperty(date) && date !== 'id' && date !== 'grades') {
+              const gradeArray = grades[date].split(',').map(g => g.trim());
+              for (const grade of gradeArray) {
+                if (grade) {
+                  gradeData.push({
+                    teacher_id: this.user_id,
+                    student_id: student.id,
+                    class_id: this.class_id,
+                    subject_id: this.subject_id,
+                    grade_date: date,
+                    grade: grade
+                  });
+                }
+              }
             }
           }
         }
-      }
-      await axios.post('/api/save-grades', gradeData);
-
-      toastr.success('Grades saved successfully.');
-    } catch (error) {
+        await axios.post('/api/save-grades', gradeData);
+        toastr.success('Grades saved successfully.');
+      } catch (error) {
         toastr.error('Failed to save grades.');
+      }
     }
-  }
-
 
   }
 };
@@ -186,5 +189,19 @@ thead th {
 
 input[type="text"] {
   width: 50px;
+}
+
+
+.save-button {
+  background-color: #0879f1;
+  color: #fff;
+  padding: 5px 25px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.save-button:hover {
+  background-color: #024389;
 }
 </style>
