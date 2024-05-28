@@ -20,6 +20,7 @@ use App\Http\Controllers\Student\RewardController;
 use App\Http\Controllers\Student\LeaderboardController;
 use App\Http\Controllers\Parent\ParentGradeController;
 use App\Http\Controllers\Parent\ParentLeaderboardController;
+use App\Http\Controllers\Student\HomeworkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -150,6 +151,7 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
     Route::get('/api/student/purchases/{userId}', [RewardController::class, 'getRewardPurchaseHistory']);
 
     Route::get('/api/student/leaderboardStudents/{userId}', [LeaderboardController::class, 'getStudents']);
+    Route::get('/api/student/homework/{userId}', [HomeworkController::class, 'index']);
 
     Route::get('/student/challenges', function () {
         return view('student.challenges.studentChallengeList');
@@ -162,6 +164,10 @@ Route::middleware(['auth', 'user-role:student'])->group(function(){
     Route::get('/student/leaderboard', function () {
         return view('student.leaderboard.studentLeaderboardList');
     })->name('studentLeaderboardList');
+
+    Route::get('/student/homework', function () {
+        return view('student.homework.studentHomework');
+    })->name('studentHomework');
 });
 
 Route::middleware(['auth', 'user-role:teacher'])->group(function(){

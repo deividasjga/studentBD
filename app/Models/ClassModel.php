@@ -28,4 +28,9 @@ class ClassModel extends Model
         return $this->hasMany(GradeModel::class, 'class_id');
     }
 
+    public function homework()
+    {
+        return $this->hasMany(HomeworkModel::class, 'class_id');
+    }
+
 }

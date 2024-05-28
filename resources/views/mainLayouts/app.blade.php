@@ -279,7 +279,7 @@ Users
 </a>
 </li>
 <li class="nav-item">
-<a href="" class="nav-link">
+<a href="{{ route('studentHomework') }}" class="nav-link {{ Request::is('student/homework') ? 'active' : '' }}">
 <i class="nav-icon fas fa-tasks"></i>
 <p>Homework</p>
 </a>

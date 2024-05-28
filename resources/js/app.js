@@ -26,6 +26,7 @@ import TeacherHomework from './components/teacher/homework/TeacherHomework.vue';
 import ParentGrades from './components/parent/ParentGrades.vue';
 import ParentHomework from './components/parent/ParentHomework.vue';
 import ParentLeaderboard from './components/parent/ParentLeaderboard.vue';
+import StudentHomework from './components/student/StudentHomework.vue';
 
 const app = createApp({});
 
@@ -52,6 +53,7 @@ app.component('test-component', Test)
     .component('student-leaderboard-component', StudentLeaderboardList)
     .component('teacher-leaderboard-component', TeacherLeaderboardList)
     .component('teacher-homework-component', TeacherHomework)
+    .component('student-homework-component', StudentHomework)
     .component('parent-grades-component', ParentGrades)
     .component('parent-homework-component', ParentHomework)
     .component('parent-leaderboard-component', ParentLeaderboard);

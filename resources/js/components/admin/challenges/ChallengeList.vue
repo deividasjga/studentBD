@@ -262,6 +262,7 @@ methods: {
         })
         .then(response => {
             console.log(response.data.message);
+            toastr.success('Challenge assigned to all students successfully');
         })
         .catch(error => {
             console.error('Error assigning challenge to all students:', error);

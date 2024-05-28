@@ -12,7 +12,7 @@
 
   <div>
   <br>
-  <h2 style="margin-left: 10px;">Class Leaderboard</h2>
+  <h2 v-if="students.length > 0" style="margin-left: 10px;">Class Leaderboard</h2>
   <table v-if="students.length > 0" class="table leaderboard-table">
     <thead>
       <tr>
@@ -29,7 +29,7 @@
       </tr>
     </tbody>
   </table>
-  <p v-else style="margin-left: 30px;">No students in this class.</p>
+  <!-- <p v-else style="margin-left: 30px;">No students in this class.</p> -->
 </div>
 
 

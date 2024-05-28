@@ -34,7 +34,7 @@
             <th>Description</th>
             <th>Valid until</th>
             <th>Price</th>
-            <th>Action</th>
+            <th>Options</th>
         </tr>
         </thead>
         <tbody>

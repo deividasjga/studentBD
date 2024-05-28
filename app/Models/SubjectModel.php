@@ -33,4 +33,9 @@ class SubjectModel extends Model
         return $this->hasMany(ChallengeModel::class);
     }
 
+    public function homework()
+    {
+        return $this->hasMany(HomeworkModel::class, 'subject_id');
+    }
+
 }
