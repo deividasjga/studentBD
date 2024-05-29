@@ -22,6 +22,7 @@ use App\Http\Controllers\Parent\ParentGradeController;
 use App\Http\Controllers\Parent\ParentLeaderboardController;
 use App\Http\Controllers\Student\HomeworkController;
 use App\Http\Controllers\Teacher\TeacherHomeworkController;
+use App\Http\Controllers\Parent\ParentHomeworkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -204,6 +205,7 @@ Route::middleware(['auth', 'user-role:parent'])->group(function(){
     Route::get('/api/getSelectedClass/{classId}', [ParentGradeController::class, 'getSelectedClass']);
     Route::get('/api/getSelectedStudentGrades/{studentId}', [ParentGradeController::class, 'getSelectedStudentGrades']);
     Route::get('/api/parent/leaderboardStudents/{userId}', [ParentLeaderboardController::class, 'getLeaderboardStudents']);
+    Route::get('/api/getClassHomework/{classId}', [ParentHomeworkController::class, 'getClassHomework']);
 
 
     Route::get('/parent/grades', function () {
