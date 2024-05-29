@@ -21,6 +21,7 @@ use App\Http\Controllers\Student\LeaderboardController;
 use App\Http\Controllers\Parent\ParentGradeController;
 use App\Http\Controllers\Parent\ParentLeaderboardController;
 use App\Http\Controllers\Student\HomeworkController;
+use App\Http\Controllers\Teacher\TeacherHomeworkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -181,7 +182,12 @@ Route::middleware(['auth', 'user-role:teacher'])->group(function(){
     Route::post('/api/save-grades',  [StudentGradesController::class, 'saveGrades']);
 
     Route::get('/api/teacher/{selectedClass}/classLeaderboard', [TeacherClassController::class, 'getClassLeaderboard']);
+    Route::get('/api/teacher/homework/{userId}', [TeacherHomeworkController::class, 'index']);
 
+    Route::get('/api/teacher/{teacher_id}/{class_id}/classSubjects', [TeacherClassController::class, 'getTeacherClassSubjects']);
+    Route::post('/api/teacher/createHomework', [TeacherHomeworkController::class, 'store']);
+    Route::put('/api/teacher/editHomework/{id}', [TeacherHomeworkController::class, 'update']);
+    Route::delete('/api/teacher/homework/{id}', [TeacherHomeworkController::class, 'destroy']);
 
     Route::get('/teacher/leaderboard', function () {
         return view('teacher.leaderboard.teacherLeaderboardList');

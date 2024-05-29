@@ -51,29 +51,7 @@ export default {
 },
 data() {
   return {
-    homework: [
-      // {
-      //   description: "Finish task 10 from 54 page.",
-      //   subject: "Math",
-      //   first_name: "Teacheris",
-      //   last_name: "Pavardenis",
-      //   dueDate: "2024-05-19"
-      // },
-      // {
-      //   description: "Read pages 20-25.",
-      //   subject: "Geography",
-      //   first_name: "Artūras",
-      //   last_name: "Pavardėnas",
-      //   dueDate: "2024-05-20"
-      // },
-      // {
-      //   description: "Write an essay on any science related topic.",
-      //   subject: "English",
-      //   first_name: "Teacheris",
-      //   last_name: "Pavardenis",
-      //   dueDate: "2024-05-25"
-      // }
-    ],
+    homework: [],
     startDate: '',
     endDate: ''
   };
@@ -87,7 +65,7 @@ computed: {
     const start = new Date(this.startDate);
     const end = new Date(this.endDate);
     return this.homework.filter(hw => {
-      const dueDate = new Date(hw.dueDate);
+      const dueDate = new Date(hw.end_date);
       return dueDate >= start && dueDate <= end;
     });
   }
@@ -97,7 +75,6 @@ methods: {
     try {
       const response = await axios.get(`/api/student/homework/${this.userId}`);
       this.homework = response.data;
-      console.log(this.homework);
     } catch (error) {
       console.error("Error fetching homework:", error);
     }

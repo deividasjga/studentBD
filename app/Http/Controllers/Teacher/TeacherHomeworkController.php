@@ -7,30 +7,59 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ClassModel;
 use App\Models\SubjectModel;
+use App\Models\GradeModel;
+use App\Models\HomeworkModel;
 
 class TeacherHomeworkController extends Controller
 {
-    public function getTeacherClasses()
+    public function index($userId)
     {
-        $teacher = auth()->user();
-        $teacherClasses = $teacher->teacherClasses()->with('subjects')->get();
-        return view('teacher.classes.teacherClassList', compact('teacherClasses'));
+        $teacher = User::findOrFail($userId);
+
+        $homework = HomeworkModel::with('teacher', 'class', 'subject')
+            ->where('teacher_id', $teacher->id)
+            ->get();
+
+        return response()->json($homework);
     }
 
-    public function getTeacherClassesJson()
+
+    public function store(Request $request)
     {
-        $teacher = auth()->user();
-        $teacherClasses = $teacher->teacherClasses()->with('subjects')->get();
-        return response()->json($teacherClasses);
+        $validatedData = $request->validate([
+            'description' => 'required|string',
+            'end_date' => 'required|date',
+            'teacher_id' => 'required|integer',
+            'class_id' => 'required|integer',
+            'subject_id' => 'required|integer',
+        ]);
+
+        $homework = HomeworkModel::create($request->all());
+        return response()->json($homework, 201);
     }
 
-    public function subjectGradeList($userId, $classId, $subjectId)
+    public function update(Request $request, $id)
     {
-        $user = User::findOrFail($userId);
-        $class = ClassModel::findOrFail($classId);
-        $subject = SubjectModel::findOrFail($subjectId);
+        $homework = HomeworkModel::findOrFail($id);
+        
+        $validatedData = $request->validate([
+            'description' => 'required|string',
+            'end_date' => 'required|date',
+            'teacher_id' => 'required|integer',
+            'class_id' => 'required|integer',
+            'subject_id' => 'required|integer',
+        ]);
 
-        return view('teacher.classes.subjectGrading', compact('userId', 'classId', 'subjectId'));
+        $homework->update($request->all());
+
+        return response()->json($homework, 200);
     }
 
+    public function destroy($id)
+    {
+        $homework = HomeworkModel::findOrFail($id);
+        $homework->delete();
+
+        return response()->json(['message' => 'Homework deleted successfully'], 200);
+    }
 }

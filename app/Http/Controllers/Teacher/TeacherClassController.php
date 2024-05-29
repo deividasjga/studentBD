@@ -24,6 +24,17 @@ class TeacherClassController extends Controller
         return response()->json($teacherClasses);
     }
 
+    public function getTeacherClassSubjects($userId, $classId)
+    {
+        $teacher = User::findOrFail($userId);
+        $subjects = SubjectModel::whereHas('teachers', function($query) use ($userId, $classId) {
+            $query->where('teacher_id', $userId)
+                  ->where('class_id', $classId);
+        })->get();
+
+        return response()->json($subjects);
+    }
+
     public function subjectGradeList($userId, $classId, $subjectId)
     {
         $user = User::findOrFail($userId);
