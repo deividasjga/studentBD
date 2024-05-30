@@ -18,26 +18,24 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'status' => 'required|unique:subjects,name',
-            'status' => 'required',
+            'name' => 'required',
         ]);
-
-        return SubjectModel::create([
-            'name' => request('name'),
-            'status' => request('status'),
+    
+        $subject = SubjectModel::create([
+            'name' => $request->input('name'),
         ]);
+    
+        return response()->json($subject, 201);
     }
 
     public function update(SubjectModel $subject)
     {
         request()->validate([
             'name' => 'required|unique:subject,name,'.$subject->id,
-            'status' => 'required',
         ]);
 
         $subject -> update([
             'name' => request('name'),
-            'status' => request('status'),
         ]);
 
         return $subject;

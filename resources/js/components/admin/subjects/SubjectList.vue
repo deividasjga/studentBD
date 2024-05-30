@@ -24,13 +24,11 @@ const getSubjects = () => {
 
 const createSubjectSchema = yup.object({
     name: yup.string().required(),
-    status: yup.number().required().integer().min(0).max(1),
 });
 
 
 const editSubjectSchema = yup.object({
     name: yup.string().required(),
-    status: yup.number().required().integer().min(0).max(1),
 });
 
 
@@ -70,7 +68,6 @@ const editSubject = (subject) => {
     formValues.value = {
         id: subject.id,
         name: subject.name,
-        status: subject.status,
     };
     form.value.setValues(formValues.value);
 };
@@ -153,7 +150,6 @@ onMounted(() => {
                             <tr>
                                 <th style="width: 35px">#</th>
                                 <th>Name</th>
-                                <th>Status</th>
                                 <th>Options</th>
                             </tr>
                         </thead>
@@ -161,7 +157,6 @@ onMounted(() => {
                             <tr v-for="(subject, index) in subjects" :key="subject.id">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ subject.name }}</td>
-                                <td>{{ subject.status == 1 ? 'Active' : 'Inactive' }}</td>
                                 <td>
                                     <a href="#" @click.prevent="editSubject(subject)"><i class="fa fa-edit"></i></a>
                                     <a href="#" @click.prevent="confirmSubjectDeletion(subject)"><i class="fa fa-trash text-danger ml-2"></i></a>
@@ -196,16 +191,6 @@ onMounted(() => {
                                 aria-describedby="nameHelp" placeholder="Enter name"/>
                                 <span class="invalid-feedback">{{ errors.name }}</span>
                         </div>
-
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <Field as="select" name="status" class="form-control" :class="{ 'is-invalid': errors.status }" id="status" aria-describedby="nameHelp">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </Field>
-                            <span class="invalid-feedback">{{ errors.status }}</span>
-                        </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

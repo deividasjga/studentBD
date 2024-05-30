@@ -10,7 +10,7 @@ class SubjectModel extends Model
     use HasFactory;
 
     protected $table = 'subject';
-    protected $fillable = ['name', 'status', 'grading_type'];
+    protected $fillable = ['name'];
 
 
     public function classes()
