@@ -22,7 +22,7 @@ class TeacherController extends Controller
             'email' => 'required|unique:users,email',
             'password' => 'required|min:8',
             'address' => 'nullable|string|max:255',
-            'date_of_birth' => 'nullable|date',
+            'date_of_birth' => 'nullable|date|before_or_equal:today',
             'gender' => 'nullable',
         ]);
 
@@ -49,7 +49,7 @@ class TeacherController extends Controller
             'email' => 'required|unique:users,email,'.$user->id,
             'password' => 'sometimes|min:8',
             'address' => 'nullable|string|max:255',
-            'date_of_birth' => 'nullable|date',
+            'date_of_birth' => 'nullable|date|before_or_equal:today',
             'gender' => 'nullable',
         ]);
     

@@ -26,7 +26,7 @@ class AdminRewardController extends Controller
             'description' => 'nullable|string',
             'points_price' => 'required|integer',
             'code' => 'required|string|unique:reward',
-            'valid_until' => 'nullable|date',
+            'valid_until' => 'nullable|date|after:today',
         ]);
 
         $encryptedCode = Crypt::encryptString($request->input('code'));
@@ -45,7 +45,7 @@ class AdminRewardController extends Controller
             'name' => 'required|string',
             'description' => 'nullable|string',
             'points_price' => 'required|integer',
-            'valid_until' => 'nullable|date',
+            'valid_until' => 'nullable|date|after:today',
         ]);
 
         $code = $request->input('code');

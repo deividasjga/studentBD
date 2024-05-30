@@ -184,16 +184,23 @@ methods: {
     },
     async saveChanges() {
     try {
-        if (this.isNewReward) {
+        const today = new Date();
+        const formattedTodayDate = today.toISOString().split('T')[0];
+        if(this.editReward.valid_until <= formattedTodayDate){
+            toastr.error('Valid_until date must be greater than today.')
+        }
+        else if (this.isNewReward) {
             const response = await axios.post('/api/admin/rewards', this.editReward);
             console.log(this.editReward);
             toastr.success('Reward created successfully.');
+            this.fetchRewards();
+            $('#editModal').modal('hide');
         } else {
             await axios.put(`/api/admin/rewards/${this.editReward.id}`, this.editReward);
             toastr.success('Reward updated successfully.');
+            this.fetchRewards();
+            $('#editModal').modal('hide');
         }
-        this.fetchRewards();
-        $('#editModal').modal('hide');
     } catch (error) {
         console.error('Error saving changes:', error);
     }
@@ -209,7 +216,7 @@ methods: {
             console.error('Error deleting reward:', error);
         });
         }
-    }
+    },
 }
 };
 </script>
