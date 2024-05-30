@@ -98,10 +98,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(HomeworkModel::class, 'teacher_id');
     }
-    // public function students()
-    // {
-    //     return $this->belongsToMany(User::class, 'parent_student', 'parent_id', 'student_id');
-    // }
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'parent_student', 'parent_id', 'student_id');
+    }
 
     // public function parents()
     // {

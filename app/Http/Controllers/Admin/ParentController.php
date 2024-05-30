@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\ParentStudentModel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,8 @@ class ParentController extends Controller
 {
     public function index()
     {
-        $users = User::where('role', 'parent')->latest()->get();
+        $users = User::with('students')->where('role', 'parent')->latest()->get();
+        // $users = User::where('role', 'parent')->latest()->get();
         return $users;
     }
 
@@ -72,5 +74,27 @@ class ParentController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return response()->json(['message' => 'Parent deleted successfully'], 200);
+    }
+
+
+
+    public function assignParentStudents(Request $request, $selectedParentId)
+    {
+        $parent = User::findOrFail($selectedParentId);
+
+        $validated = $request->validate([
+            'students' => 'array',
+            'students.*' => 'exists:users,id'
+        ]);
+
+        ParentStudentModel::where('parent_id', $parent->id)->delete();
+
+        if (!empty($validated['students'])) {
+            $parent->students()->sync($validated['students']);
+        }
+
+        $parent->load('students');
+
+        return response()->json($parent->students);
     }
 }

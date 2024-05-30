@@ -64,6 +64,7 @@ Route::middleware(['auth', 'user-role:admin'])->group(function(){
     Route::post('api/parents', [ParentController::class, 'store']);
     Route::put('api/parents/{user}', [ParentController::class, 'update']);
     Route::delete('api/parents/{user}', [ParentController::class, 'destroy']);
+    Route::post('api/parents/assignStudents/{selectedParentId}', [ParentController::class, 'assignParentStudents']);
 
     Route::get('api/admins', [AdminController::class, 'index']);
     Route::post('api/admins', [AdminController::class, 'store']);
