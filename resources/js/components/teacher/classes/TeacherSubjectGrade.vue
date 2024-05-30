@@ -113,16 +113,25 @@ export default {
     async saveGrades() {
       try {
         const gradeData = [];
-
+        const numberGrades = [];
+        const letterGrades = ['n', 'N'];
+        for (let i = 1; i <= 10; i++) {
+          numberGrades.push(i.toString());
+        }
+        const correctGrades = letterGrades.concat(numberGrades);
+        let isIncorrectGrade = false;
         for (let i = 0; i < this.students.length; i++) {
           const student = this.students[i];
           const grades = this.studentGrades[i];
-
           for (const date in grades) {
             if (grades.hasOwnProperty(date) && date !== 'id' && date !== 'grades') {
               const gradeArray = grades[date].split(',').map(g => g.trim());
               for (const grade of gradeArray) {
                 if (grade) {
+                  if (!correctGrades.includes(grade)) {
+                    isIncorrectGrade = true;
+                    break;
+                  }
                   gradeData.push({
                     teacher_id: this.user_id,
                     student_id: student.id,
@@ -133,9 +142,17 @@ export default {
                   });
                 }
               }
+              if (isIncorrectGrade) break;
             }
           }
+          if (isIncorrectGrade) break;
         }
+
+        if (isIncorrectGrade) {
+          toastr.error('Grades must be between 1-10 or n.');
+          return;
+        }
+
         await axios.post('/api/save-grades', gradeData);
         toastr.success('Grades saved successfully.');
       } catch (error) {
