@@ -43,9 +43,9 @@ Auth::routes();
 
 Route::middleware(['auth'])->group(function(){
 
-    Route::get('/test', function () {
-        return view('test');
-    })->name('test');
+    Route::get('/homePage', function () {
+        return view('homePage');
+    })->name('homePage');
 });
 
 

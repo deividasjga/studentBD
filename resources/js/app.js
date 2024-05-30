@@ -7,7 +7,7 @@ import { createApp } from 'vue/dist/vue.esm-bundler.js';
 import { createRouter, createWebHistory } from 'vue-router';
 import Routes from './routes.js';
 
-import Test from './components/Test.vue';
+import HomePage from './components/HomePage.vue';
 import StudentList from './components/admin/students/StudentList.vue';
 import SubjectList from './components/admin/subjects/SubjectList.vue';
 import ClassList from './components/admin/classes/ClassList.vue';
@@ -37,7 +37,7 @@ const router = createRouter({
 
 app.use(router);
 
-app.component('test-component', Test)
+app.component('home-page-component', HomePage)
     .component('student-list-component', StudentList)
     .component('subject-component', SubjectList)
     .component('class-component', ClassList)
