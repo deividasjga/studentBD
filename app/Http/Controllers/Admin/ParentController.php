@@ -25,7 +25,7 @@ class ParentController extends Controller
             'password' => 'required|min:8',
             'address' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date|before_or_equal:today',
-            'gender' => 'nullable',
+            'gender' => 'nullable|in:male,female,other',
         ]);
 
         $user = User::create([
@@ -52,7 +52,7 @@ class ParentController extends Controller
             'password' => 'sometimes|min:8',
             'address' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date|before_or_equal:today',
-            'gender' => 'nullable',
+            'gender' => 'nullable|in:male,female,other',
         ]);
     
         $user->update([

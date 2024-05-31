@@ -10,12 +10,16 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Carbon\Carbon;
 
 class RewardController extends Controller
 {
     public function index()
     {
-        $rewards = RewardModel::whereNull('student_id')->get();
+        $rewards = RewardModel::whereNull('student_id')
+            ->where('valid_until', '>', Carbon::now())
+            ->get();
+        
         return response()->json($rewards);
     }
 
