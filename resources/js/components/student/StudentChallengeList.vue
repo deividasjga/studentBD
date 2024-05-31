@@ -121,14 +121,14 @@
     daysLeft(endDate) {
       const today = new Date();
       const endDay = new Date(endDate);
-      const diffTime = endDay - today;
-      const diffDays = Math.ceil(diffTime / (1000*60*60*24));
-      if (diffDays <= 0) {
+      const timeDifference = endDay - today;
+      const DaysDifference = Math.ceil(timeDifference / (1000*60*60*24));
+      if (DaysDifference <= 0) {
         return "Challenge ended";
-      } else if (diffDays === 1) {
-        return "Time left: " + diffDays + " day";
+      } else if (DaysDifference === 1) {
+        return "Time left: " + DaysDifference + " day";
       } else {
-        return "Time left: " + diffDays + " days";
+        return "Time left: " + DaysDifference + " days";
       }
     },
     formatDate(date) {

@@ -48,7 +48,6 @@ export default {
     },
     mounted() {
     this.fetchParentStudents();
-    // this.fetchStudentLeaderboard();
     },
     methods: {
         async fetchParentStudents() {

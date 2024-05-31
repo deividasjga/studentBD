@@ -11,7 +11,6 @@ class SubjectController extends Controller
     public function index()
     {
         $subjects = SubjectModel::latest()->get();
-
         return $subjects;
     }
 

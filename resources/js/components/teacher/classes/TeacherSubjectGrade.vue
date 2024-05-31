@@ -219,7 +219,6 @@ input[type="text"] {
   font-size: 15px;
 }
 
-
 .save-button {
   background-color: #0879f1;
   color: #fff;

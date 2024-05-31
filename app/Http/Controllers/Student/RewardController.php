@@ -16,14 +16,12 @@ class RewardController extends Controller
     public function index()
     {
         $rewards = RewardModel::whereNull('student_id')->get();
-
         return response()->json($rewards);
     }
 
     public function getStudentPoints($userId)
     {
         $points = PointModel::where('student_id', $userId)->sum('points');
-
         return response()->json(['points' => $points]);
     }
 
@@ -45,8 +43,6 @@ class RewardController extends Controller
         return response()->json(['message' => 'Points subtracted successfully'], 200);
     }
 
-
-
     public function decryptCode(Request $request)
     {
         $code = $request->input('code');
@@ -58,11 +54,9 @@ class RewardController extends Controller
         }
     }
 
-
     public function getRewardPurchaseHistory($userId)
     {
         $rewardPurchases = RewardModel::where('student_id', $userId)->get();
-
         return response()->json($rewardPurchases);
     }
 

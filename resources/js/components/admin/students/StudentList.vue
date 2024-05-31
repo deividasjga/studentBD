@@ -1,152 +1,3 @@
-<script setup>
-import axios from 'axios';
-import { ref, onMounted, reactive } from 'vue';
-import { Form, Field, useResetForm } from 'vee-validate';
-import * as yup from 'yup';
-import { useToastr } from '../../../toastr.js';
-import { formatDate } from '../../../helper.js';
-
-const toastr = useToastr();
-const users = ref([]);
-const editing = ref(false);
-// const formValues = ref();
-const formValues = ref({
-    id: null,
-    first_name: '',
-    last_name: '',
-    email: '',
-    address: '',
-    date_of_birth: '',
-    gender: '',
-    selectedClass: null,
-});
-const form = ref(null);
-const userIdBeingDeleted = ref(null);
-
-
-const getUsers = () => {
-    axios.get('http://127.0.0.1:8000/api/students')
-    .then((response) => {
-        users.value = response.data;
-    })
-}
-
-
-const createUserSchema = yup.object({
-    first_name: yup.string().label('First name').required(),
-    last_name: yup.string().label('Last name').required(),
-    email: yup.string().email().required(),
-    password: yup.string().required().min(8),
-});
-
-
-const editUserSchema = yup.object({
-    first_name: yup.string().required().max(255),
-    email: yup.string().email().required(),
-    password: yup.string().notRequired().test('password', 'Passwords must be be minimum of 8 characters', function(value) {
-                if (!!value) {
-                const schema = yup.string().min(8);
-                return schema.isValidSync(value);
-                }
-                return true;
-            }),
-});
-
-
-
-const createUser = (values, { resetForm, setErrors }) => {
-    const emailExists = users.value.some(user => user.email === values.email);
-    if (emailExists) {
-        setErrors({ email: ['This email is already taken.'] });
-        return;
-    }
-
-    axios.post('http://127.0.0.1:8000/api/students', values)
-    .then((response) => {
-        users.value.unshift(response.data);
-        $('#userFormModal').modal('hide');
-        resetForm();
-        toastr.success('Student created successfully.')
-    })
-    .catch((error) => {
-        setErrors(error.response.data.errors);
-    });
-};
-
-
-
-const addUser = () => {
-    editing.value = false;
-    form.value.resetForm();
-    $('#userFormModal').modal('show');
-};
-
-
-const editUser = (user) => {
-    editing.value = true;
-    form.value.resetForm();
-    $('#userFormModal').modal('show');
-    formValues.value = {
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        address: user.address,
-        date_of_birth: user.date_of_birth,
-        gender: user.gender,
-        selectedClass: user.student_class_id,
-    };
-    form.value.setValues(formValues.value);
-};
-
-
-const updateUser = (values, {setErrors}) => {
-    axios.put('http://127.0.0.1:8000/api/students/' + formValues.value.id, values)
-        .then((response) => {
-            const index = users.value.findIndex(user => user.id === response.data.id);
-            users.value[index] = response.data;
-            $('#userFormModal').modal('hide');
-            toastr.success('Student updated successfully.');
-        }).catch((error) => {
-            setErrors(error.response.data.errors);
-            console.log(error);
-        });
-}
-
-
-const handleSubmit = (values, actions) => {
-    values.selectedClass = formValues.value.selectedClass;
-    if (editing.value) {
-        updateUser(values, actions);
-    } else {
-        createUser(values, actions);
-    }
-};
-
-
-const confirmUserDeletion = (user) => {
-    userIdBeingDeleted.value = user.id;
-    $('#deleteUserModal').modal('show')
-};
-
-
-const deleteUser = () => {
-    axios.delete(`http://127.0.0.1:8000/api/students/${userIdBeingDeleted.value}`)
-    .then(() => {
-        $('#deleteUserModal').modal('hide');
-        users.value = users.value.filter(user => user.id !== userIdBeingDeleted.value);
-        toastr.success('Student deleted successfully.');
-    });
-};
-
-
-
-
-onMounted(() => {
-    getUsers();
-});
-</script>
-
 <template>
     <div class="content-header">
     <div class="container-fluid">
@@ -300,10 +151,7 @@ onMounted(() => {
             </Form>
         </div>
     </div>
-</div>
-
-
-
+    </div>
 
 
     <div class="modal fade" id="deleteUserModal" data-backdrop="static" tabindex="-1" role="dialog"
@@ -329,6 +177,142 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+
+<script setup>
+import axios from 'axios';
+import { ref, onMounted, reactive } from 'vue';
+import { Form, Field, useResetForm } from 'vee-validate';
+import * as yup from 'yup';
+import { useToastr } from '../../../toastr.js';
+import { formatDate } from '../../../helper.js';
+
+const toastr = useToastr();
+const users = ref([]);
+const editing = ref(false);
+const formValues = ref({
+    id: null,
+    first_name: '',
+    last_name: '',
+    email: '',
+    address: '',
+    date_of_birth: '',
+    gender: '',
+    selectedClass: null,
+});
+const form = ref(null);
+const userIdBeingDeleted = ref(null);
+
+const getUsers = () => {
+    axios.get('http://127.0.0.1:8000/api/students')
+    .then((response) => {
+        users.value = response.data;
+    })
+}
+
+const createUserSchema = yup.object({
+    first_name: yup.string().label('First name').required(),
+    last_name: yup.string().label('Last name').required(),
+    email: yup.string().email().required(),
+    password: yup.string().required().min(8),
+});
+
+const editUserSchema = yup.object({
+    first_name: yup.string().required().max(255),
+    email: yup.string().email().required(),
+    password: yup.string().notRequired().test('password', 'Passwords must be be minimum of 8 characters', function(value) {
+                if (!!value) {
+                const schema = yup.string().min(8);
+                return schema.isValidSync(value);
+                }
+                return true;
+            }),
+});
+
+const createUser = (values, { resetForm, setErrors }) => {
+    const emailExists = users.value.some(user => user.email === values.email);
+    if (emailExists) {
+        setErrors({ email: ['This email is already taken.'] });
+        return;
+    }
+
+    axios.post('http://127.0.0.1:8000/api/students', values)
+    .then((response) => {
+        users.value.unshift(response.data);
+        $('#userFormModal').modal('hide');
+        resetForm();
+        toastr.success('Student created successfully.')
+    })
+    .catch((error) => {
+        setErrors(error.response.data.errors);
+    });
+};
+
+const addUser = () => {
+    editing.value = false;
+    form.value.resetForm();
+    $('#userFormModal').modal('show');
+};
+
+const editUser = (user) => {
+    editing.value = true;
+    form.value.resetForm();
+    $('#userFormModal').modal('show');
+    formValues.value = {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        address: user.address,
+        date_of_birth: user.date_of_birth,
+        gender: user.gender,
+        selectedClass: user.student_class_id,
+    };
+    form.value.setValues(formValues.value);
+};
+
+const updateUser = (values, {setErrors}) => {
+    axios.put('http://127.0.0.1:8000/api/students/' + formValues.value.id, values)
+        .then((response) => {
+            const index = users.value.findIndex(user => user.id === response.data.id);
+            users.value[index] = response.data;
+            $('#userFormModal').modal('hide');
+            toastr.success('Student updated successfully.');
+        }).catch((error) => {
+            setErrors(error.response.data.errors);
+            console.log(error);
+        });
+}
+
+const handleSubmit = (values, actions) => {
+    values.selectedClass = formValues.value.selectedClass;
+    if (editing.value) {
+        updateUser(values, actions);
+    } else {
+        createUser(values, actions);
+    }
+};
+
+const confirmUserDeletion = (user) => {
+    userIdBeingDeleted.value = user.id;
+    $('#deleteUserModal').modal('show')
+};
+
+const deleteUser = () => {
+    axios.delete(`http://127.0.0.1:8000/api/students/${userIdBeingDeleted.value}`)
+    .then(() => {
+        $('#deleteUserModal').modal('hide');
+        users.value = users.value.filter(user => user.id !== userIdBeingDeleted.value);
+        toastr.success('Student deleted successfully.');
+    });
+};
+
+onMounted(() => {
+    getUsers();
+});
+</script>
+
+
 
 <script>
 export default {

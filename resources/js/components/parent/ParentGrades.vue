@@ -92,8 +92,6 @@ data() {
 },
 mounted() {
     this.fetchParentStudents();
-    // this.fetchStudent();
-    // this.fetchStudentGrades();
 },
 methods: {
     async fetchParentStudents() {

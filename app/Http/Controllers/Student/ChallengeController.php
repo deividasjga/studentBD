@@ -24,16 +24,6 @@ class ChallengeController extends Controller
 
     public function getMyChallenges($studentId)
     {
-        // $user = User::findOrFail($studentId);
-
-        // $challenges = ChallengeModel::whereHas('studentChallenges', function ($query) use ($user) {
-        //     $query->where('student_id', $user->id);
-        // })->with(['studentChallenges' => function ($query) use ($user) {
-        //     $query->where('student_id', $user->id);
-        // }])->whereDate('end_date', '>=', Carbon::today())->get();
-    
-        // return response()->json($challenges);
-
         $user = User::findOrFail($studentId);
 
         $challenges = ChallengeModel::whereHas('studentChallenges', function ($query) use ($user) {

@@ -187,7 +187,7 @@ methods: {
         const today = new Date();
         const formattedTodayDate = today.toISOString().split('T')[0];
         if(this.editReward.valid_until <= formattedTodayDate){
-            toastr.error('Valid_until date must be greater than today.')
+            toastr.error('Valid_until date must be greater than today.');
         }
         else if (this.isNewReward) {
             const response = await axios.post('/api/admin/rewards', this.editReward);

@@ -1,122 +1,3 @@
-<script setup>
-import axios from 'axios';
-import { ref, onMounted, reactive } from 'vue';
-import { Form, Field, useResetForm } from 'vee-validate';
-import * as yup from 'yup';
-import { useToastr } from '../../../toastr.js';
-import { formatDate } from '../../../helper.js';
-
-const toastr = useToastr();
-const subjects = ref([]);
-const editing = ref(false);
-const formValues = ref();
-const form = ref(null);
-const subjectIdBeingDeleted = ref(null);
-
-
-const getSubjects = () => {
-    axios.get('http://127.0.0.1:8000/api/subjects')
-    .then((response) => {
-        subjects.value = response.data;
-    })
-}
-
-
-const createSubjectSchema = yup.object({
-    name: yup.string().required(),
-});
-
-
-const editSubjectSchema = yup.object({
-    name: yup.string().required(),
-});
-
-
-
-const createSubject = (values, { resetForm, setErrors }) => {
-    const subjectNameExists = subjects.value.some(subject => subject.name === values.name);
-    if (subjectNameExists) {
-        setErrors({ name: ['This name is already taken.'] });
-        return;
-    }
-
-    axios.post('http://127.0.0.1:8000/api/subjects', values)
-    .then((response) => {
-        subjects.value.unshift(response.data);
-        $('#subjectFormModal').modal('hide');
-        resetForm();
-        toastr.success('Subject created successfully.')
-    })
-    .catch((error) => {
-        setErrors(error.response.data.errors);
-    });
-};
-
-
-
-const addSubject = () => {
-    editing.value = false;
-    form.value.resetForm();
-    $('#subjectFormModal').modal('show');
-};
-
-
-const editSubject = (subject) => {
-    editing.value = true;
-    form.value.resetForm();
-    $('#subjectFormModal').modal('show');
-    formValues.value = {
-        id: subject.id,
-        name: subject.name,
-    };
-    form.value.setValues(formValues.value);
-};
-
-
-const updateSubject = (values, {setErrors}) => {
-    axios.put('http://127.0.0.1:8000/api/subjects/' + formValues.value.id, values)
-        .then((response) => {
-            const index = subjects.value.findIndex(subject => subject.id === response.data.id);
-            subjects.value[index] = response.data;
-            $('#subjectFormModal').modal('hide');
-            toastr.success('Subject updated successfully.');
-        }).catch((error) => {
-            setErrors(error.response.data.errors);
-            console.log(error);
-        });
-}
-
-
-const handleSubmit = (values, actions) => {
-    if (editing.value) {
-        updateSubject(values, actions);
-    } else {
-        createSubject(values, actions);
-    }
-};
-
-
-const confirmSubjectDeletion = (subject) => {
-    subjectIdBeingDeleted.value = subject.id;
-    $('#deleteSubjectModal').modal('show')
-};
-
-
-const deleteSubject = () => {
-    axios.delete(`http://127.0.0.1:8000/api/subjects/${subjectIdBeingDeleted.value}`)
-    .then(() => {
-        $('#deleteSubjectModal').modal('hide');
-        subjects.value = subjects.value.filter(subject => subject.id !== subjectIdBeingDeleted.value);
-        toastr.success('Subject deleted successfully.');
-    });
-};
-
-
-onMounted(() => {
-    getSubjects();
-});
-</script>
-
 <template>
     <div class="content-header">
     <div class="container-fluid">
@@ -224,7 +105,112 @@ onMounted(() => {
             </div>
         </div>
     </div>
-
-
-
 </template>
+
+<script setup>
+import axios from 'axios';
+import { ref, onMounted, reactive } from 'vue';
+import { Form, Field, useResetForm } from 'vee-validate';
+import * as yup from 'yup';
+import { useToastr } from '../../../toastr.js';
+import { formatDate } from '../../../helper.js';
+
+const toastr = useToastr();
+const subjects = ref([]);
+const editing = ref(false);
+const formValues = ref();
+const form = ref(null);
+const subjectIdBeingDeleted = ref(null);
+
+
+const getSubjects = () => {
+    axios.get('http://127.0.0.1:8000/api/subjects')
+    .then((response) => {
+        subjects.value = response.data;
+    })
+}
+
+const createSubjectSchema = yup.object({
+    name: yup.string().required(),
+});
+
+const editSubjectSchema = yup.object({
+    name: yup.string().required(),
+});
+
+
+const createSubject = (values, { resetForm, setErrors }) => {
+    const subjectNameExists = subjects.value.some(subject => subject.name === values.name);
+    if (subjectNameExists) {
+        setErrors({ name: ['This name is already taken.'] });
+        return;
+    }
+
+    axios.post('http://127.0.0.1:8000/api/subjects', values)
+    .then((response) => {
+        subjects.value.unshift(response.data);
+        $('#subjectFormModal').modal('hide');
+        resetForm();
+        toastr.success('Subject created successfully.')
+    })
+    .catch((error) => {
+        setErrors(error.response.data.errors);
+    });
+};
+
+const addSubject = () => {
+    editing.value = false;
+    form.value.resetForm();
+    $('#subjectFormModal').modal('show');
+};
+
+const editSubject = (subject) => {
+    editing.value = true;
+    form.value.resetForm();
+    $('#subjectFormModal').modal('show');
+    formValues.value = {
+        id: subject.id,
+        name: subject.name,
+    };
+    form.value.setValues(formValues.value);
+};
+
+const updateSubject = (values, {setErrors}) => {
+    axios.put('http://127.0.0.1:8000/api/subjects/' + formValues.value.id, values)
+        .then((response) => {
+            const index = subjects.value.findIndex(subject => subject.id === response.data.id);
+            subjects.value[index] = response.data;
+            $('#subjectFormModal').modal('hide');
+            toastr.success('Subject updated successfully.');
+        }).catch((error) => {
+            setErrors(error.response.data.errors);
+            console.log(error);
+        });
+}
+
+const handleSubmit = (values, actions) => {
+    if (editing.value) {
+        updateSubject(values, actions);
+    } else {
+        createSubject(values, actions);
+    }
+};
+
+const confirmSubjectDeletion = (subject) => {
+    subjectIdBeingDeleted.value = subject.id;
+    $('#deleteSubjectModal').modal('show')
+};
+
+const deleteSubject = () => {
+    axios.delete(`http://127.0.0.1:8000/api/subjects/${subjectIdBeingDeleted.value}`)
+    .then(() => {
+        $('#deleteSubjectModal').modal('hide');
+        subjects.value = subjects.value.filter(subject => subject.id !== subjectIdBeingDeleted.value);
+        toastr.success('Subject deleted successfully.');
+    });
+};
+
+onMounted(() => {
+    getSubjects();
+});
+</script>

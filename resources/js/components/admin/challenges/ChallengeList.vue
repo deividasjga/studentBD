@@ -267,7 +267,7 @@ methods: {
         .catch(error => {
             console.error('Error assigning challenge to all students:', error);
         });
-}
+    }
 
 }
 };

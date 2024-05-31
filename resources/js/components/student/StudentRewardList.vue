@@ -36,20 +36,16 @@
         <table class="table table-bordered" v-if="rewards.length > 0">
         <thead>
         <tr>
-            <!-- <th>ID</th> -->
             <th>Name</th>
             <th>Description</th>
-            <!-- <th>Valid until</th> -->
             <th>Price</th>
             <th>Action</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="rewardItem in rewards" :key="rewardItem.id">
-            <!-- <td>{{ rewardItem.id }}</td> -->
             <td>{{ rewardItem.name }}</td>
             <td>{{ rewardItem.description }}</td>
-            <!-- <td>{{ rewardItem.valid_until }}</td> -->
             <td>{{ rewardItem.points_price }} <i class="far fa-gem"></i></td>
             <td>
                 <a href="#" @click.prevent="openConfirmRewardModal(rewardItem)"><i class="fa fa-shopping-cart"></i></a>
@@ -131,8 +127,6 @@
         </div>
     </div>
 </div>
-
-
 </template>
     
 <script>
@@ -279,7 +273,6 @@ methods: {
         }
     },
 
-    
     async fetchStudent() {
         try {
           const response = await axios.get(`/api/getStudent/${this.userId}`);
@@ -334,36 +327,36 @@ methods: {
 </script>
 
 <style>
-    .points-container {
-        display: flex;
-        align-items: center;
-    }
+  .points-container {
+    display: flex;
+    align-items: center;
+  }
 
-    .points-container span {
-        margin-right: 5px;
-        margin-left: 5px;
-    }
+  .points-container span {
+    margin-right: 5px;
+    margin-left: 5px;
+  }
 
 
-    .reward-code-container {
+  .reward-code-container {
     text-align: center;
     margin-top: 24px;
-    }
+  }
 
-    .reward-code {
+  .reward-code {
     font-size: 25px;
     padding: 12px 22px;
     border: 3px solid #3fe1e3;
     border-radius: 8px;
-    }
+  }
 
-    .open-modal-btn {
+  .open-modal-btn {
     float: right;
     margin-right: 10px;
     margin-bottom: 25px;
-    }
+  }
 
-    .purchase-item {
+  .purchase-item {
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -11,7 +11,6 @@ class StudentController extends Controller
     public function index()
     {
         $users = User::where('role', 'student')->latest()->get();
-        // $users = User::with('studentClassId')->where('role', 'student')->latest()->get();
         return $users;
     }
 
@@ -73,9 +72,6 @@ class StudentController extends Controller
     }
     
     
-    
-
-
     public function destroy($id)
     {
         $user = User::findOrFail($id);

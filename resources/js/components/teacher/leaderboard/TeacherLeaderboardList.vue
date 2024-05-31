@@ -1,5 +1,4 @@
 <template>
-
 <div>
   <h2 style="margin-left: 10px;">Teacher Classes</h2>
   <label for="classSelect" style="margin-left: 30px;">Select a class:</label>
@@ -8,7 +7,6 @@
           {{ classItem.name }}
       </option>
   </select>
-
 
   <div>
   <br>
@@ -29,76 +27,75 @@
       </tr>
     </tbody>
   </table>
-  <!-- <p v-else style="margin-left: 30px;">No students in this class.</p> -->
+  
 </div>
 
-
-  </div>
-  </template>
+</div>
+</template>
 
 
 
 <script>
 export default {
-    props: {
-    userId: {
-    type: Number,
-    required: true,
-    },
-    },
-    data() {
-    return {
-        students: [],
-        studentId: '',
-        teacherClasses: [],
-    };
-    },
-    mounted() {
-      this.fetchClasses();
-    },
-    methods: {
-      async fetchClasses() {
-        try {
-        const response = await axios.get(`/api/teacher/${this.userId}/classList`);
-        this.teacherClasses = response.data;
-        console.log(this.teacherClasses);
-        } catch (error) {
-        console.error('Error fetching teacher classes:', error);
-        }
-    },
-    async fetchClassLeaderboard() {
-        try {
-        const response = await axios.get(`/api/teacher/${this.selectedClass}/classLeaderboard`);
-        this.students = response.data.sort((a, b) => b.total_subject_average - a.total_subject_average);
-        console.log(response.data);
-        } catch (error) {
-        console.error('Error fetching student leaderboard:', error);
-        }
-    },
-    getPlaceNumber(index) {
-      if (index === 0) {
-        return 'firstPlace';
-      } else if (index === 1) {
-        return 'secondPlace';
-      } else if (index === 2) {
-        return 'thirdPlace';
+props: {
+userId: {
+type: Number,
+required: true,
+},
+},
+data() {
+return {
+    students: [],
+    studentId: '',
+    teacherClasses: [],
+};
+},
+mounted() {
+  this.fetchClasses();
+},
+methods: {
+  async fetchClasses() {
+    try {
+    const response = await axios.get(`/api/teacher/${this.userId}/classList`);
+    this.teacherClasses = response.data;
+    console.log(this.teacherClasses);
+    } catch (error) {
+    console.error('Error fetching teacher classes:', error);
+    }
+  },
+  async fetchClassLeaderboard() {
+      try {
+      const response = await axios.get(`/api/teacher/${this.selectedClass}/classLeaderboard`);
+      this.students = response.data.sort((a, b) => b.total_subject_average - a.total_subject_average);
+      console.log(response.data);
+      } catch (error) {
+      console.error('Error fetching student leaderboard:', error);
       }
-      return '';
-    },
-    getEmotePlace(place) {
-      switch (place) {
-        case 1:
-          return '🥇🏆';
-        case 2:
-          return '🥈';
-        case 3:
-          return '🥉';
-        default:
-          return place;
-      }
-    },
+  },
+  getPlaceNumber(index) {
+    if (index === 0) {
+      return 'firstPlace';
+    } else if (index === 1) {
+      return 'secondPlace';
+    } else if (index === 2) {
+      return 'thirdPlace';
+    }
+    return '';
+  },
+  getEmotePlace(place) {
+    switch (place) {
+      case 1:
+        return '🥇🏆';
+      case 2:
+        return '🥈';
+      case 3:
+        return '🥉';
+      default:
+        return place;
+    }
+  },
 
-    },
+  },
 };
 </script>
 

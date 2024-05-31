@@ -23,7 +23,7 @@ import StudentRewardList from './components/student/StudentRewardList.vue';
 import StudentLeaderboardList from './components/student/StudentLeaderboardList.vue';
 import TeacherLeaderboardList from './components/teacher/leaderboard/TeacherLeaderboardList.vue';
 import TeacherHomework from './components/teacher/homework/TeacherHomework.vue';
-import ParentGrades from './components/parent/ParentGrades.vue';
+import ParentGrades from './components/parent/parentGrades.vue';
 import ParentHomework from './components/parent/ParentHomework.vue';
 import ParentLeaderboard from './components/parent/ParentLeaderboard.vue';
 import StudentHomework from './components/student/StudentHomework.vue';
